@@ -1,15 +1,13 @@
 /* --- ROOT CSS --- */
 
-body
-{
+body {
     overflow: hidden;
     -webkit-user-select: none;
     line-height: 1.6em;
     background: #000;
 }
 
-#app-bg
-{
+#app-bg {
     position: fixed;
     top: 0px;
     left: 0px;
@@ -20,8 +18,7 @@ body
     z-index: -1000;
 }
 
-#app
-{
+#app {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -31,17 +28,41 @@ body
 
 /* --- GLOBAL CSS --- */
 
-h1, h2, h3, h4, h5, h6 { margin: 0; padding: 0; }
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
 
-textarea, input, button, select, .editor { outline: none; }
+textarea, input, button, select, .editor {
+    outline: none;
+}
 
-input[type='checkbox'] { width: 20px; height: 20px; margin: 0; padding: 0; line-height: 0; vertical-align: bottom; margin-bottom: 6px; }
+input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    vertical-align: bottom;
+    margin-bottom: 6px;
+}
 
-a { color: #2f919a; text-decoration: none; transition: color 0.25s; }
-a:hover { color: #000;}
+a { 
+    color: #2f919a;
+    text-decoration: none;
+    transition: color 0.25s;
+}
+a:hover {
+    color: #000;
+}
 
-::-webkit-scrollbar
-{
+.templates, .hidden {
+    display: none; 
+}
+
+/* --- SCROLLBAR --- */
+
+::-webkit-scrollbar {
     background: -webkit-linear-gradient(top, #eee, #f4f4f4 50%, #eee);
     border-radius: 12px;
     border: 1px solid #e8e8e8;
@@ -49,16 +70,19 @@ a:hover { color: #000;}
     border-bottom: 1px solid #ccc;
     cursor: pointer;
 }
-::-webkit-scrollbar-button { display: none; }
-::-webkit-scrollbar-thumb { background: #ccc; border-radius: 12px; border: 1px solid #ccc; }
+::-webkit-scrollbar-button {
+    display: none;
+}
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+}
 ::-webkit-scrollbar-thumb:hover { background: #289aa5; border: 1px solid #148691; }
-
-.templates, .hidden { display: none; }
 
 /* --- VARIOUS CSS --- */
 
-.app-info
-{
+.app-info {
     position: absolute;
     left: 20px;
     bottom: 20px;
@@ -70,23 +94,19 @@ a:hover { color: #000;}
     z-index:-10;
 }
 
-.app-info span
-{
+.app-info span {
     display: block;
 }
 
-.app-title
-{
+.app-title {
     font-weight: bold;
 }
 
-.app-version::before
-{
+.app-version::before {
     content: "Version ";
 }
 
-.icon
-{
+.icon {
     border-radius: 4px;
     width: 32px;
     height: 32px;
@@ -98,24 +118,21 @@ a:hover { color: #000;}
     transition: opacity 0.25s, background 0.25s;
 }
 
-.icon:hover
-{
+.icon:hover {
     opacity: 1;
     background-color: #fff;
 }
 
 /* --- MENU --- */
 
-.app-menu
-{
+.app-menu {
     position: absolute;
     top: 20px;
     right: 20px;
     z-index: 100;
 }
 
-.app-menu .menu
-{
+.app-menu .menu {
     width: 140px;
     float: left;
     display: inline;
@@ -168,14 +185,12 @@ a:hover { color: #000;}
     color: #000;
 }
 
-.app-menu .dropdown .item:active
-{
+.app-menu .dropdown .item:active {
     background: #ddd;
     color: #555;
 }
 
-.app-menu .dropdown .search-field
-{
+.app-menu .dropdown .search-field {
     box-sizing: border-box;
     float: left;
     display: block;
@@ -183,40 +198,45 @@ a:hover { color: #000;}
     padding: 10px;
 }
 
-.app-menu .menu:hover .dropdown
-{
+.app-menu .menu:hover .dropdown {
     max-height: 400px;
 }
 
-.app-menu .menu:hover .title
-{
+.app-menu .menu:hover .title {
     background: #f4f4f4;
 }
 
-.app-menu .menu:active .title
-{
+.app-menu .menu:active .title {
     background: #ddd;
     color: #555;
 }
 
 /* --- NODE SEARCH--- */
 
-.app-search
-{
+.app-search {
     position: absolute;
     top: 20px;
     left: 20px;
     z-index: 100;
-    
     background: #fff;
     border-radius: 2px;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
     padding: 10px 20px 10px 10px;
 }
 
-.app-search input { padding: 4px 8px 4px 8px; font-family: "Lucida Console", Monaco, monospace; margin-left: 10px; margin-right: 4px; }
-.app-search .search-field { margin-left: 0px; margin-right: 0px; }
-.app-search input[type="checkbox"] { cursor: pointer; }
+.app-search input {
+    padding: 4px 8px 4px 8px;
+    font-family: "Lucida Console", Monaco, monospace;
+    margin-left: 10px;
+    margin-right: 4px;
+}
+.app-search .search-field {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.app-search input[type="checkbox"] {
+    cursor: pointer;
+}
 
 .app-search .search-item {
     display: inline;
@@ -224,8 +244,7 @@ a:hover { color: #000;}
 
 /* --- ZOOM --- */
 
-.app-zoom
-{
+.app-zoom {
     float: left;
     display: inline;
     margin-left: 20px;
@@ -235,8 +254,7 @@ a:hover { color: #000;}
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-.app-zoom span
-{
+.app-zoom span {
     width: 32px;
     height: 32px;
     margin: 8px;
@@ -251,15 +269,13 @@ a:hover { color: #000;}
 .app-zoom span:nth-child(2) { background-position: -32px 0px; }
 .app-zoom span:nth-child(3) { background-position: -64px 0px; }
 .app-zoom span:nth-child(4) { background-position: -96px 0px; }
-.app-zoom span:hover
-{
+.app-zoom span:hover {
     opacity: 0.50;
 }
 
 /* --- SORT --- */
 
-.app-sort
-{
+.app-sort {
     position: absolute;
     top: 83px;
     left: 20px;
@@ -271,8 +287,7 @@ a:hover { color: #000;}
     z-index: 99;
 }
 
-.app-sort span
-{
+.app-sort span {
     width: 32px;
     height: 32px;
     margin: 8px;
@@ -287,15 +302,13 @@ a:hover { color: #000;}
 .app-sort span:nth-child(2) { background-position: -32px 0px; }
 .app-sort span:nth-child(3) { background-position: -64px 0px; }
 .app-sort span:nth-child(4) { background-position: -96px 0px; }
-.app-sort span:hover
-{
+.app-sort span:hover {
     opacity: 0.50;
 }
 
 /* --- NODE WINDOW CSS --- */
 
-.arrows
-{
+.arrows {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -305,21 +318,18 @@ a:hover { color: #000;}
     right: 0;
 }
 
-.nodes
-{
+.nodes {
     position: absolute;
     overflow: hidden;
     width: 100%;
     height: 100%;
 }
 
-.nodes-holder
-{
+.nodes-holder {
     position: absolute;
 }
 
-.node
-{
+.node {
     position: absolute;
     width: 200px;
     height: 200px;
@@ -332,13 +342,11 @@ a:hover { color: #000;}
     transition: border 0.25s;
 }
 
-.node:hover
-{
+.node:hover {
     border: 1px solid #49eff1;
 }
 
-.node .title
-{
+.node .title {
     box-sizing: border-box;
     width: 100%;
     padding: 0px 10px 0px 10px;
@@ -352,8 +360,7 @@ a:hover { color: #000;}
     overflow: hidden;
 }
 
-.node .body
-{
+.node .body {
     position: absolute;
     box-sizing: border-box;
     top: 40px;
@@ -367,20 +374,21 @@ a:hover { color: #000;}
     line-height: 1.3em;
 }
 
-.node .body p { display: inline; margin: 0; padding:  0; }
+.node .body p {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
 
-.node:hover .body
-{
+.node:hover .body {
     overflow: auto;
 }
 
-.node .body-expanded
-{
+.node .body-expanded {
     overflow: auto;
 }
 
-.node .tags
-{
+.node .tags {
     position: absolute;
     box-sizing: border-box;
     width: 100%;
@@ -391,8 +399,7 @@ a:hover { color: #000;}
     overflow: hidden;
 }
 
-.node .tags span
-{
+.node .tags span {
     padding: 4px 8px 4px 8px;
     margin: 4px 4px 0px 0px;
     font-size: 0.8em;
@@ -401,8 +408,7 @@ a:hover { color: #000;}
     border-radius: 4px;
 }
 
-.node .edit, .node .delete, .node .colorUp, .node .colorDown
-{
+.node .edit, .node .delete, .node .colorUp, .node .colorDown {
     position: absolute;
     right: 40px;
     top: 4px;
@@ -410,33 +416,28 @@ a:hover { color: #000;}
     transition: opacity 0.125s;
 }
 
-.node .delete
-{
+.node .delete {
     right: 4px;
     background-position: -32px 0px;
 }
 
-.node .colorUp
-{
+.node .colorUp {
     width: 16px;
     right: 40px;
     background-position: -112px 0px;
 }
 
-.node .colorDown
-{
+.node .colorDown {
     width: 16px;
     right: 56px;
     background-position: -96px 0px;
 }
 
-.node:hover .edit, .node:hover .delete, .node:hover .colorUp, .node:hover .colorDown
-{
+.node:hover .edit, .node:hover .delete, .node:hover .colorUp, .node:hover .colorDown {
     opacity: 1;
 }
 
-.node .resize
-{
+.node .resize {
     position: absolute;
     right: 0px;
     bottom: 0px;
@@ -445,13 +446,18 @@ a:hover { color: #000;}
     background-color: #ddd;
 }
 
-.inactive, .inactive:hover { border: 1px solid #fff; cursor: default; pointer-events:none; }
-.inactive .edit, .inactive .delete, .inactive:hover .edit, .inactive:hover .delete { opacity: 0; }
+.inactive, .inactive:hover { 
+    border: 1px solid #fff;
+    cursor: default;
+    pointer-events:none;
+}
+.inactive .edit, .inactive .delete, .inactive:hover .edit, .inactive:hover .delete { 
+    opacity: 0; 
+}
 
 /* --- NODE EDITOR --- */
 
-.node-editor
-{
+.node-editor {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -459,8 +465,7 @@ a:hover { color: #000;}
     background: rgba(0, 0, 0, 0.5);
 }
 
-.node-editor .form
-{
+.node-editor .form {
     position: absolute;
     box-sizing: border-box;
     left: 5%;
@@ -473,16 +478,14 @@ a:hover { color: #000;}
     box-shadow: 0px 1px 1px #000;
 }
 
-.node-editor .form .close
-{
+.node-editor .form .close {
     position: absolute;
     right: 4px;
     top: 4px;
     background-position: -64px 0px;
 }
 
-.node-editor .form input[type="text"]
-{
+.node-editor .form input[type="text"] {
     box-sizing: border-box;
     width: 100%;
     font-size: 1.2em;
@@ -495,16 +498,14 @@ a:hover { color: #000;}
 }
 
 
-.node-editor .form .editor-container
-{
+.node-editor .form .editor-container {
     margin-top: 20px;
     width: 100%;
     height: calc(100% - 120px);
     float: left;
 }
 
-.node-editor .form .editor
-{
+.node-editor .form .editor {
     white-space: pre;
     box-sizing: border-box;
     min-height: 100%;
@@ -516,8 +517,7 @@ a:hover { color: #000;}
     cursor: text;
 }
 
-.node-editor .form .editor-footer
-{
+.node-editor .form .editor-footer {
     width: 100%;
     text-align:center;
     font-size: 0.8em;
@@ -525,37 +525,35 @@ a:hover { color: #000;}
 
 /* --- EDITOR HIGHLIGHTING --- */
 
-.editor p, .node .body p { display: inline; margin: 0; padding: 0; }
+.editor p, .node .body p { 
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
 
-.linkname
-{
+.linkname {
     color: #3ecfe9;
 }
 
-.linkbounds
-{
+.linkbounds {
     color: #0ec0e0;
 }
 
-.condition
-{
+.condition {
     color: #e93ecf;
 }
 
-.conditionbounds
-{
+.conditionbounds {
     color: #e00ec0;
 }
 
-.comment
-{
+.comment {
     color: #44fe66;
 }
 
 /* --- NODE DELETE --- */
 
-.node-delete
-{
+.node-delete {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -564,8 +562,7 @@ a:hover { color: #000;}
     
 }
 
-.node-delete .form
-{
+.node-delete .form {
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
@@ -577,8 +574,7 @@ a:hover { color: #000;}
     box-shadow: 0px 1px 1px #000;
 }
 
-.node-delete .form .close
-{
+.node-delete .form .close {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -588,8 +584,7 @@ a:hover { color: #000;}
 
 /* --- MARQUEE --- */
 
-#marquee
-{
+#marquee {
     z-index: 10000;
     display: block;
     position: absolute;
