@@ -1,10 +1,7 @@
-const electron = require('electron');
-const ipcMain = electron.ipcMain;
-const {dialog} = require('electron');
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const url = require('url')
+const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -13,21 +10,37 @@ let yarnRunnerWindow;
 
 function createWindow () {
     // Create the browser window.
-    // screen.height;
-    // screen.width;
-    let {width, height} = require('electron').screen.getPrimaryDisplay().size;
     mainWindow =  new BrowserWindow({
-        defaultWidth: 1000,
-        defaultHeight: 800,
-        maximize: false,
-        show: false
+        width: 1200,
+        height: 800,
+        minWidth: 800,
+        minHeight: 600,
+        show: false,
+        //frame: false,
+        //icon: "Yarn.png"
     });
-    mainWindow.maximize();
-    // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/app/index.html`);
+    // Hide the menu
+    //mainWindow.setMenu(null);
     
+    // and load the index.html of the app.
+    // mainWindow.loadURL(url.format({
+    //   pathname: path.join(__dirname, 'app/index.html'),
+    //   protocol: 'file',
+    //   slashes: true
+    // }));
+    mainWindow.loadFile('app/index.html');
+    
+    // While loading the page, the ready-to-show event will be emitted when the
+    // renderer process has rendered the page for the first time if the window has
+    // not been shown yet. Showing the window after this event will have no visual
+    // flash
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+        //mainWindow.maximize();
+    })
+
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools({mode:'bottom'});
     
     mainWindow.on('close', function (event) {
         event.preventDefault();
