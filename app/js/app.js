@@ -1,5 +1,8 @@
+'use strict';
+
 const electron = require('electron');
 const remote = electron.remote;
+const Marquee = require('./js/marquee');
 
 var App = function(name, version)
 {
@@ -129,24 +132,16 @@ var App = function(name, version)
         {
             var dragging = false;
             var offset = { x: 0, y: 0 };
-            var MarqueeOn = false;
-            var MarqueeSelection = [];
-            var MarqRect = {x1:0,y1:0,x2:0,y2:0};
-            var MarqueeOffset = [0, 0];
+            var marquee = new Marquee();
 
             $(".nodes").on("mousedown", function(e)
             {
-                $("#marquee").css({x:0, y:0, width:0, height:0});
                 dragging = true;
                 offset.x = e.pageX;
                 offset.y = e.pageY;
-                MarqueeSelection = [];
-                MarqRect = {x1:0,y1:0,x2:0,y2:0};
+                marquee.disable();
 
                 var scale = self.cachedScale;
-
-                MarqueeOffset[0] = 0;
-                MarqueeOffset[1] = 0;
 
                 if (!e.altKey && !e.shiftKey)
                     self.deselectAllNodes();
@@ -160,13 +155,7 @@ var App = function(name, version)
                     if (e.altKey || e.button === 1)
                     {
                         //prevents jumping straight back to standard dragging
-                        if (MarqueeOn)
-                        {
-                            MarqueeSelection = [];
-                            MarqRect = {x1:0,y1:0,x2:0,y2:0};
-                            $("#marquee").css({x:0, y:0, width:0, height:0});
-                        }
-                        else
+                        if (!marquee.isActive())
                         {
                             self.transformOrigin[0] += e.pageX - offset.x;
                             self.transformOrigin[1] += e.pageY - offset.y;
@@ -191,45 +180,40 @@ var App = function(name, version)
                     }
                     else
                     {	
-                        MarqueeOn = true;
+                        marquee.setActive(true);
 
                         var scale = self.cachedScale;
 
                         if (e.pageX > offset.x && e.pageY < offset.y) 
                         {
-                            MarqRect.x1 = offset.x;
-                            MarqRect.y1 = e.pageY;
-                            MarqRect.x2 = e.pageX;
-                            MarqRect.y2 = offset.y;
+                            marquee.rect.x1 = offset.x;
+                            marquee.rect.y1 = e.pageY;
+                            marquee.rect.x2 = e.pageX;
+                            marquee.rect.y2 = offset.y;
                         }
                         else if (e.pageX > offset.x && e.pageY > offset.y)
                         {
-                            MarqRect.x1 = offset.x;
-                            MarqRect.y1 = offset.y;
-                            MarqRect.x2 = e.pageX;
-                            MarqRect.y2 = e.pageY;
+                            marquee.rect.x1 = offset.x;
+                            marquee.rect.y1 = offset.y;
+                            marquee.rect.x2 = e.pageX;
+                            marquee.rect.y2 = e.pageY;
                         }
                         else if (e.pageX < offset.x && e.pageY < offset.y)
                         {
-                            MarqRect.x1 = e.pageX;
-                            MarqRect.y1 = e.pageY;
-                            MarqRect.x2 = offset.x;
-                            MarqRect.y2 = offset.y;
+                            marquee.rect.x1 = e.pageX;
+                            marquee.rect.y1 = e.pageY;
+                            marquee.rect.x2 = offset.x;
+                            marquee.rect.y2 = offset.y;
                         }
                         else
                         {
-                            MarqRect.x1 = e.pageX;
-                            MarqRect.y1 = offset.y;
-                            MarqRect.x2 = offset.x;
-                            MarqRect.y2 = e.pageY;	
+                            marquee.rect.x1 = e.pageX;
+                            marquee.rect.y1 = offset.y;
+                            marquee.rect.x2 = offset.x;
+                            marquee.rect.y2 = e.pageY;	
                         }
 
-                        $("#marquee").css({
-                            x:MarqRect.x1,
-                            y:MarqRect.y1,
-                            width:Math.abs(MarqRect.x1-MarqRect.x2),
-                            height:Math.abs(MarqRect.y1-MarqRect.y2)
-                        });
+                        marquee.draw();
 
                         //Select nodes which are within the marquee
                         // MarqueeSelection is used to prevent it from deselecting already
@@ -238,23 +222,24 @@ var App = function(name, version)
                         var nodes = self.nodes();
                         for (var i in nodes)
                         {
-                            var index = MarqueeSelection.indexOf(nodes[i]);
+                            var index = marquee.selection.indexOf(nodes[i]);
                             var inMarqueeSelection = (index >= 0);
 
                             //test the Marque scaled to the nodes x,y values
 
                             var holder = $(".nodes-holder").offset(); 
-                            var marqueeOverNode = (MarqRect.x2 - holder.left) / scale > nodes[i].x()
-                                && (MarqRect.x1 - holder.left) / scale < nodes[i].x() + nodes[i].tempWidth
-                                && (MarqRect.y2 - holder.top) / scale > nodes[i].y()
-                                && (MarqRect.y1 - holder.top) / scale < nodes[i].y() + nodes[i].tempHeight;
+                            var marqueeOverNode = 
+                                    (marquee.rect.x2 - holder.left) / scale > nodes[i].x()
+                                &&  (marquee.rect.x1 - holder.left) / scale < nodes[i].x() + nodes[i].tempWidth
+                                &&  (marquee.rect.y2 - holder.top) / scale > nodes[i].y()
+                                &&  (marquee.rect.y1 - holder.top) / scale < nodes[i].y() + nodes[i].tempHeight;
 
                             if (marqueeOverNode)
                             {
                                 if (!inMarqueeSelection)
                                 {
                                     self.addNodeSelected(nodes[i]);
-                                    MarqueeSelection.push(nodes[i]);
+                                    marquee.selection.push(nodes[i]);
                                 }
                             }
                             else
@@ -262,7 +247,7 @@ var App = function(name, version)
                                 if (inMarqueeSelection)
                                 {
                                     self.removeNodeSelection(nodes[i]);
-                                    MarqueeSelection.splice(index, 1);
+                                    marquee.selection.splice(index, 1);
                                 }
                             }
                         }
@@ -275,15 +260,12 @@ var App = function(name, version)
                 console.log("finished dragging");
                 dragging = false;
 
-                if (MarqueeOn && MarqueeSelection.length == 0) {
+                if (marquee.isActive() && marquee.selection.length == 0) {
                     self.deselectAllNodes();
                 }
                 document.body.classList.remove('mouseMoveView');
 
-                MarqueeSelection = [];
-                MarqRect = {x1: 0, y1: 0, x2: 0, y2: 0};
-                $("#marquee").css({x: 0, y: 0, width: 0, height: 0});
-                MarqueeOn = false;
+                marquee.disable();
             });
         })();
 
