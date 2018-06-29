@@ -47,7 +47,7 @@ var App = function(name, version)
         // this.gui = require('nw.gui');
         this.gui = remote.getCurrentWindow();
         this.fs = remote.require('fs');
-        console.log(this.fs);
+        //console.log(this.fs);
         this.isNwjs = true;
     }
 
@@ -218,7 +218,7 @@ var App = function(name, version)
                         //Select nodes which are within the marquee
                         // MarqueeSelection is used to prevent it from deselecting already
                         // selected nodes and deselecting onces which have been selected
-                        // by the marquee 
+                        // by the marquee
                         var nodes = self.nodes();
                         for (var i in nodes)
                         {
@@ -287,6 +287,7 @@ var App = function(name, version)
             }
         });
 
+        // Zoom In & Out
         // using the event helper
         $('.nodes').mousewheel(function(event) {
             // https://github.com/InfiniteAmmoInc/Yarn/issues/40
@@ -324,6 +325,7 @@ var App = function(name, version)
             self.shifted = e.shiftKey; 
         });
 
+        // right click
         $(document).contextmenu( function(e) {
             var isAllowedEl = (
                     $(e.target).hasClass('nodes')
@@ -368,8 +370,11 @@ var App = function(name, version)
             }
         });
         
+        // Shortcuts for Saving/Opening files
         $(document).on('keydown', function(e) {
-            if (self.isNwjs === false) { return; }
+            if (self.isNwjs === false) {
+                return;
+            }
             
             if (e.ctrlKey || e.metaKey)
             {
@@ -377,11 +382,12 @@ var App = function(name, version)
                 {
                     switch(e.keyCode)
                     {
-                        case 83: 
+                        case 83: // Ctrl + Shift + S
                             data.trySave(FILETYPE.JSON);
                             self.fileKeyPressed = true;
                         break;
-                        case 65:
+                        case 65: // Ctrl + Shift + A
+                            // TODO doesn't seem to work
                             data.tryAppend();
                             self.fileKeyPressed = true;
                         break;
@@ -391,7 +397,7 @@ var App = function(name, version)
                 {
                     switch(e.keyCode)
                     {
-                        case 83: 
+                        case 83: // Ctrl + Alt + S
                             data.trySave(FILETYPE.YARNTEXT);
                             self.fileKeyPressed = true;
                         break;
@@ -401,7 +407,7 @@ var App = function(name, version)
                 {
                     switch(e.keyCode)
                     {
-                        case 83: 
+                        case 83: // Ctrl + S
                             if (data.editingPath() != null) {
                                 data.trySaveCurrent();
                             } else {
@@ -409,7 +415,7 @@ var App = function(name, version)
                             }
                             self.fileKeyPressed = true;
                         break;
-                        case 79:
+                        case 79: // Ctrl + O
                             data.tryOpenFile();
                             self.fileKeyPressed = true;
                         break;
@@ -429,28 +435,26 @@ var App = function(name, version)
                 movement = scale * 100;
             }
 
-            if (e.keyCode === 65 || e.keyCode === 37)
+
+            if (e.keyCode === 65 || e.keyCode === 37) // a or left arrow
             {  
-                // a or left arrow
                 self.transformOrigin[0] += movement;
             }
-            else if (e.keyCode === 68 || e.keyCode === 39)
+            else if (e.keyCode === 68 || e.keyCode === 39) // d or right arrow
             {
-                // d or right arrow
                 self.transformOrigin[0] -= movement;
             }
-            else if (e.keyCode === 87 || e.keyCode === 38)
+            else if (e.keyCode === 87 || e.keyCode === 38) // w or up arrow
             {
-                // w or up arrow
                 self.transformOrigin[1] += movement;
             }
-            else if (e.keyCode === 83 || e.keyCode === 40)
+            else if (e.keyCode === 83 || e.keyCode === 40) // w or down arrow
             {
-                // w or down arrow
                 self.transformOrigin[1] -= movement;
             }
-            else if (e.keyCode === 32)
+            else if (e.keyCode === 32) // Space key
             {
+                // Select the next node
                 var selectedNodes = self.getSelectedNodes();
                 var nodes = selectedNodes.length > 0
                             ? selectedNodes
@@ -772,7 +776,11 @@ var App = function(name, version)
     }
 
     this.testRunFrom = function(startTestNode){
-        ipc.send('testYarnStoryFrom',JSON.parse(data.getSaveData(FILETYPE.JSON)),startTestNode);
+        ipc.send(
+            'testYarnStoryFrom',
+            JSON.parse(data.getSaveData(FILETYPE.JSON)),
+            startTestNode
+        );
     }
 
     this.openNodeListMenu = function(action) 

@@ -461,7 +461,9 @@ var data =
                 saveas = 'accept="' + dialog.attr("accept") + '"';
             }
 
-            dialog.parent().append('<input type="file" id="' + dialog.attr("id") + '" ' + accept + ' ' + saveas + '>');
+            dialog.parent().append(
+                '<input type="file" id="' + dialog.attr("id") + '" ' + accept + ' ' + saveas + '>'
+            );
             dialog.unbind("change");
             dialog.remove();
         });

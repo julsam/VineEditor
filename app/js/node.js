@@ -169,7 +169,7 @@ var Node = function()
             app.matchConnectedColorID(self);
         }
 
-        if(self.selected) {
+        if (self.selected) {
             app.setSelectedColors(self);
         }
     }
@@ -185,7 +185,7 @@ var Node = function()
             app.matchConnectedColorID(self);
         }
 
-        if(self.selected) {
+        if (self.selected) {
             app.setSelectedColors(self);
         }
     }
