@@ -128,9 +128,6 @@
             <!-- ko if:app.editing() != null -->
             <div class="node-editor" data-bind="mousedown:app.saveNode">
                 <div class="form" data-bind="preventBubble: 'click', preventBubble: 'mousedown'">
-                    <input type="text" class="title" data-bind="value: app.editing().title" placeholder="Title">
-                    
-                    <!-- <div float="left"> </div> -->
                     
                     <div class="app-menu">
                         <div class="menu" style="float:left">
@@ -140,6 +137,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <input type="text" class="title" data-bind="value: app.editing().title" placeholder="Title">
+                    
+                    <!-- <div float="left"> </div> -->
 
                     <input type="text" data-bind="value: app.editing().tags" placeholder="Tags">
 
