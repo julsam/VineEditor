@@ -369,11 +369,17 @@ var App = function(name, version)
             {
                 switch(e.keyCode)
                 {
-                    case 90: self.historyDirection("undo");
+                    case 90: // Z
+                        self.historyDirection("undo");
+                        break;
+                    case 89: // Y
+                        self.historyDirection("redo");
                     break;
-                    case 89: self.historyDirection("redo");
+                    case 65: // A
+                        self.selectAllNodes();
                     break;
-                    case 68: self.deselectAllNodes();
+                    case 68: // D
+                        self.deselectAllNodes();
                 }
             }
         });
@@ -671,6 +677,16 @@ var App = function(name, version)
         var nodes = self.nodes();
         for (var i in nodes) {
             self.removeNodeSelection(nodes[i]);
+        }
+    }
+
+    this.selectAllNodes = function()
+    {
+        var nodes = self.nodes();
+        self.deselectAllNodes();
+        for (var i in nodes) {
+            self.nodeSelection.push(nodes[i]);
+            nodes[i].setSelected(true);
         }
     }
 
