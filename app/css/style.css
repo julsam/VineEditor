@@ -538,8 +538,15 @@ a:hover {
 
 .node-editor .form .editor-footer {
     width: 100%;
-    text-align:center;
-    font-size: 0.8em;
+    text-align: right;
+    font-size: 0.75em;
+    font-family: "Lucida Console", Monaco, monospace;
+    color: #777;
+}
+
+.node-editor .form .editor-footer span {
+    font-weight: bold;
+    color: #555;
 }
 
 /* --- EDITOR HIGHLIGHTING --- */
