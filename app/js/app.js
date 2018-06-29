@@ -80,7 +80,7 @@ var App = function(name, version)
             win.menu = nativeMenuBar;
         }
 
-        // search field enter
+        // search field
         self.$searchField.on("keydown", function(e)
         {
             // enter
@@ -290,6 +290,18 @@ var App = function(name, version)
         $(".search-title input").click(self.updateSearch);
         $(".search-body input").click(self.updateSearch);
         $(".search-tags input").click(self.updateSearch);
+        
+        // Shortcut to focus search field
+        $(document).on('keydown', function(e) {
+            if (self.editing() || self.$searchField.is(':focus')) {
+                return;
+            }
+            if (e.ctrlKey || e.metaKey) {
+                if (e.keyCode === 70) { // Ctrl + F
+                    self.$searchField.focus();
+                }
+            }
+        });
 
         // using the event helper
         $('.nodes').mousewheel(function(event) {
@@ -349,6 +361,9 @@ var App = function(name, version)
         }); 
 
         $(document).on('keydown', function(e) {
+            if (self.editing() || self.$searchField.is(':focus')) {
+                return;
+            }
             //global ctrl+z
             if ((e.metaKey || e.ctrlKey) && !self.editing())
             {
@@ -414,7 +429,9 @@ var App = function(name, version)
         });
         
         $(document).on('keydown', function(e) {
-            if (self.editing() || self.$searchField.is(':focus') || e.ctrlKey || e.metaKey) return;
+            if (self.editing() || self.$searchField.is(':focus') || e.ctrlKey || e.metaKey) {
+                return;
+            }
             var scale = self.cachedScale || 1,
                 movement = scale * 500;
 
