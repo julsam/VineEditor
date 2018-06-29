@@ -35,7 +35,7 @@
 
             <!-- search form -->
             <div class="app-search">
-                <input type="text" class="search-field"/>
+                <input type="search" class="search-field" id="app-search-field" placeholder="Search"/>
                 
                 <div class="search-title search-item">
                     <input type="checkbox" checked="checked" id="search-title" />
@@ -128,7 +128,7 @@
             <!-- ko if:app.editing() != null -->
             <div class="node-editor" data-bind="mousedown:app.saveNode">
                 <div class="form" data-bind="preventBubble: 'click', preventBubble: 'mousedown'">
-                    <input type="text" class="title" data-bind="value: app.editing().title">
+                    <input type="text" class="title" data-bind="value: app.editing().title" placeholder="Title">
                     
                     <!-- <div float="left"> </div> -->
                     
@@ -141,7 +141,7 @@
                         </div>
                     </div>
 
-                    <input type="text" data-bind="value: app.editing().tags">
+                    <input type="text" data-bind="value: app.editing().tags" placeholder="Tags">
 
                     <div class="editor-container">
                         <div class="editor" id="editor"

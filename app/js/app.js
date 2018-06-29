@@ -36,7 +36,7 @@ var App = function(name, version)
 
     this.nodeSelection = [];
 
-    this.$searchField = $(".search-field");
+    this.$searchField = $("#app-search-field");
 
     // node-webkit
     if (typeof(require) == "function")

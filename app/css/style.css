@@ -234,13 +234,16 @@ a:hover {
 
 .app-search input {
     padding: 4px 8px 4px 8px;
-    font-family: "Lucida Console", Monaco, monospace;
+    /* font-family: "Lucida Console", Monaco, monospace; */
     margin-left: 10px;
     margin-right: 4px;
 }
 .app-search .search-field {
     margin-left: 0px;
     margin-right: 0px;
+}
+.app-search .search-field::placeholder {
+    opacity: 0.5;
 }
 .app-search input[type="checkbox"] {
     cursor: pointer;
@@ -509,6 +512,10 @@ a:hover {
     font-family: "Lucida Console", Monaco, monospace;
 }
 
+.node-editor .form input[type="text"]::placeholder {
+    opacity: 0.35;
+    font-style: italic;
+}
 
 .node-editor .form .editor-container {
     margin-top: 20px;
