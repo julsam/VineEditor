@@ -416,8 +416,11 @@ var App = function(name, version)
                             self.fileKeyPressed = true;
                         break;
                         case 79: // Ctrl + O
-                            data.tryOpenFile();
-                            self.fileKeyPressed = true;
+                            // shouldn't be allowed to open new project while editing code
+                            if (self.editing() == null) {
+                                data.tryOpenFile();
+                                self.fileKeyPressed = true;
+                            }
                         break;
                     }
                 }
