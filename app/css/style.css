@@ -7,6 +7,11 @@ body {
     background: #000;
 }
 
+/* Move the view around */
+body.mouseMoveView * {
+    cursor: move !important;
+}
+
 /* Grab node */
 body.mouseGrabReady * {
     cursor: -webkit-grab !important;

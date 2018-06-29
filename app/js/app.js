@@ -170,6 +170,7 @@ var App = function(name, version)
                         {
                             self.transformOrigin[0] += e.pageX - offset.x;
                             self.transformOrigin[1] += e.pageY - offset.y;
+                            document.body.classList.add('mouseMoveView');
 
                             self.translate();
 
@@ -277,6 +278,7 @@ var App = function(name, version)
                 if (MarqueeOn && MarqueeSelection.length == 0) {
                     self.deselectAllNodes();
                 }
+                document.body.classList.remove('mouseMoveView');
 
                 MarqueeSelection = [];
                 MarqRect = {x1: 0, y1: 0, x2: 0, y2: 0};
