@@ -228,6 +228,8 @@ var Node = function()
         {
             if (dragging)
             {
+                document.body.classList.add('mouseGrabbing');
+                
                 var parent = $(self.element).parent();
                 var newX = (e.pageX / self.getScale() - offset[0]);
                 var newY = (e.pageY / self.getScale() - offset[1]);
@@ -295,6 +297,7 @@ var Node = function()
                 app.mouseUpOnNodeNotMoved();
             }
 
+            document.body.classList.remove('mouseGrabbing');
             moved = false;
         });
 
@@ -304,6 +307,7 @@ var Node = function()
             groupDragging = false;
             moved = false;
 
+            document.body.classList.remove('mouseGrabbing');
             app.updateArrowsThrottled();
         });
     }

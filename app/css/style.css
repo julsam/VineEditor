@@ -7,6 +7,14 @@ body {
     background: #000;
 }
 
+/* Grab node */
+body.mouseGrabReady * {
+    cursor: -webkit-grab !important;
+}
+body.mouseGrabbing * {
+    cursor: -webkit-grabbing !important;
+}
+
 #app-bg {
     position: fixed;
     top: 0px;
@@ -359,6 +367,10 @@ a:hover {
     transition: color 0.25s, background 0.25s;
     overflow: hidden;
 }
+.node .title:hover {
+    cursor: -webkit-grab;
+}
+
 
 .node .body {
     position: absolute;
