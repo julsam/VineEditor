@@ -75,7 +75,7 @@ a:hover {
 
 /* --- SCROLLBAR --- */
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     background: -webkit-linear-gradient(top, #eee, #f4f4f4 50%, #eee);
     border-radius: 12px;
     border: 1px solid #e8e8e8;
@@ -91,10 +91,11 @@ a:hover {
     border-radius: 12px;
     border: 1px solid #ccc;
 }
-::-webkit-scrollbar-thumb:hover { background: #289aa5; border: 1px solid #148691; }
+::-webkit-scrollbar-thumb:hover { background: #289aa5; border: 1px solid #148691; } */
 
 /* --- VARIOUS CSS --- */
 
+/* App name & version */
 .app-info {
     position: absolute;
     left: 20px;
