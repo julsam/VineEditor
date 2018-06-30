@@ -1,10 +1,10 @@
 
 (function() {
-    var instances_by_id = {} // needed for referencing instances during updates.
-    , init_id = 0;                     // generated id increment storage
+    var instances_by_id = {}; // needed for referencing instances during updates.
+    var init_id = 0;          // generated id increment storage
 
     ko.bindingHandlers.ace = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
             var options = allBindingsAccessor().aceOptions || {};
             var value = ko.utils.unwrapObservable(valueAccessor());
@@ -15,19 +15,23 @@
                 init_id = init_id + 1;
             }
 
-            var editor = ace.edit( element.id );
+            var editor = ace.edit(element.id);
 
-            if ( options.theme ) editor.setTheme("ace/theme/" + options.theme);
-            if ( options.mode ) editor.getSession().setMode("ace/mode/" + options.mode);
+            if (options.theme) {
+                editor.setTheme("ace/theme/" + options.theme);
+            }
+            if (options.mode) {
+                editor.getSession().setMode("ace/mode/" + options.mode);
+            }
 
             editor.setValue(value);
-            editor.gotoLine( 0 );
+            editor.gotoLine(0);
             editor.setShowPrintMargin(false);
-			editor.getSession().setUseWrapMode(true);
+            editor.getSession().setUseWrapMode(true);
 
-            editor.getSession().on("change",function(delta){
+            editor.getSession().on("change", function(delta){
                 if (ko.isWriteableObservable(valueAccessor())) {
-                    valueAccessor()( editor.getValue() );
+                    valueAccessor()(editor.getValue());
                 }
             });
 
@@ -39,7 +43,7 @@
                 delete instances_by_id[element.id];
             });
         },
-        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var value = ko.utils.unwrapObservable(valueAccessor());
             var id = element.id;
 
@@ -51,21 +55,23 @@
                 var content = editor.getValue();
                 if (content !== value) {
                     editor.setValue(value);
-                    editor.gotoLine( 0 );
+                    editor.gotoLine(0);
                 }
             }
         }
     };
     
     ko.aceEditors = {
-        resizeAll: function(){
+        resizeAll: function() {
             for (var id in instances_by_id) {
-                if (!instances_by_id.hasOwnProperty(id)) continue;
+                if (!instances_by_id.hasOwnProperty(id)) {
+                    continue;
+                }
                 var editor = instances_by_id[id];
                 editor.resize();
             }
         },
-        get: function(id){
+        get: function(id) {
             return instances_by_id[id];
         }
     };
