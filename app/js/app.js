@@ -556,7 +556,19 @@ var App = function(name, version)
         // apple command key
         //$(window).on('keydown', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = true; } });
         //$(window).on('keyup', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = false; } });
-    }
+    
+        // Handle file dropping
+        document.ondragover = document.ondrop = e => {
+            e.preventDefault();
+        };
+        document.body.ondrop = e => {
+            e.preventDefault();
+            data.openFile($("#open-file"), e.dataTransfer.files[0].path);
+            for (var i = 1; i < e.dataTransfer.files.length; i++) {
+                data.appendFile(e, e.dataTransfer.files[i].path, false);
+            }
+        };
+    } // end of "run" function
 
     this.startSelectNextNodeTimer = function() {
         self.allowSelectNextNode = true;
