@@ -1308,7 +1308,7 @@ var App = function(name, version)
         self.translate(200);
     }
 
-    this.translate = function(speed)
+    this.translate = function(speed=0)
     {
         var updateArrowsInterval = setInterval(self.updateArrowsThrottled, 16);
 
@@ -1323,8 +1323,9 @@ var App = function(name, version)
                     ")"
                 )
             },
-            speed || 0,
+            speed,
             "easeInQuad",
+            //"linear",
             function() {
                 clearInterval(updateArrowsInterval);
                 self.updateArrowsThrottled();
