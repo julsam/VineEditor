@@ -24,7 +24,7 @@ var App = function(name, version)
     this.editingHistory = [];
     //this.appleCmdKey = false;
     this.editingSaveHistoryTimeout = null;
-    this.dirty = false;
+    this.dirty = false; // not used
     this.focusedNode = null;
     this.focusedNodeIdx = -1;
     this.zoomSpeed = .005;
@@ -639,7 +639,7 @@ var App = function(name, version)
         }
         // Get the current window
         var win = remote.getCurrentWindow();
-        win.setTitle("Vine Editor - [" + editingPath + "] ");// + (self.dirty?"*":"");
+        win.setTitle("Vine Editor - [" + editingPath + "] ");
     }
 
     this.recordNodeAction = function(action, node)
