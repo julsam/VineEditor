@@ -32,6 +32,7 @@ var App = function(name, version)
     this.transformOrigin = [0, 0];
     this.shifted = false;
     this.isNwjs = false;
+    self.allowSelectNextNode = true; // allows toggle nodes with spacebar
     
     this.UPDATE_ARROWS_THROTTLE_MS = 25;
 
@@ -427,52 +428,69 @@ var App = function(name, version)
             }
         });
         
-        $(document).on('keydown', function(e) {
-            if (self.editing() || self.$searchField.is(':focus') || e.ctrlKey || e.metaKey) {
+        $(document).on("keydown", function(e) {
+            if (self.editing() || self.$searchField.is(":focus") || e.ctrlKey || e.metaKey) {
                 return;
             }
-            var scale = self.cachedScale || 1,
-                movement = scale * 500;
+            let scale = self.cachedScale || 1;
+            let movement = scale * 500;
 
             if (e.shiftKey) {
                 movement = scale * 100;
             }
 
-
             if (e.keyCode === 65 || e.keyCode === 37) // a or left arrow
             {  
                 self.transformOrigin[0] += movement;
+                self.translate(100);
             }
             else if (e.keyCode === 68 || e.keyCode === 39) // d or right arrow
             {
                 self.transformOrigin[0] -= movement;
+                self.translate(100);
             }
             else if (e.keyCode === 87 || e.keyCode === 38) // w or up arrow
             {
                 self.transformOrigin[1] += movement;
+                self.translate(100);
             }
             else if (e.keyCode === 83 || e.keyCode === 40) // w or down arrow
             {
                 self.transformOrigin[1] -= movement;
+                self.translate(100);
             }
-            else if (e.keyCode === 32) // Space key
+             // Spacebar toggle between nodes
+            else if (e.keyCode === 32 && self.allowSelectNextNode)
             {
                 // Select the next node
-                var selectedNodes = self.getSelectedNodes();
-                var nodes = selectedNodes.length > 0
-                            ? selectedNodes
-                            : self.nodes();
-                var isNodeSelected = selectedNodes.length > 0;
-                if (self.focusedNodeIdx > -1 && nodes.length > self.focusedNodeIdx
-                    && (self.transformOrigin[0] != -nodes[self.focusedNodeIdx].x() + $(window).width() / 2 - $(nodes[self.focusedNodeIdx].element).width() / 2
-                        || self.transformOrigin[1] != -nodes[self.focusedNodeIdx].y() + $(window).height() / 2 - $(nodes[self.focusedNodeIdx].element).height() / 2)
-                    ) {
-                    self.focusedNodeIdx = -1;
+                let selectedNodes = self.getSelectedNodes();
+                // needs more than 1 to toggle between nodes
+                let isNodeSelected = selectedNodes.length > 1;
+                let nodes = isNodeSelected ? selectedNodes : self.nodes();
+                if (self.focusedNodeIdx > -1 && nodes.length > self.focusedNodeIdx)
+                {
+                    let isOutOfScreenView = (
+                            self.transformOrigin[0] !=
+                                -nodes[self.focusedNodeIdx].x() +
+                                $(window).width() / 2 -
+                                $(nodes[self.focusedNodeIdx].element).width() / 2
+                        ||  self.transformOrigin[1] !=
+                                -nodes[self.focusedNodeIdx].y() +
+                                $(window).height() / 2 -
+                                $(nodes[self.focusedNodeIdx].element).height() / 2
+                    );
+                    if (isOutOfScreenView) {
+                        self.focusedNodeIdx = -1;
+                    }
                 }
                 
                 if (++self.focusedNodeIdx >= nodes.length) {
                     self.focusedNodeIdx = 0;
                 }
+
+                self.allowSelectNextNode = false;
+                setTimeout(self.startSelectNextNodeTimer, 300);
+
                 self.cachedScale = 1;
                 if (isNodeSelected) {
                     self.warpToSelectedNodeIdx(self.focusedNodeIdx);
@@ -480,13 +498,54 @@ var App = function(name, version)
                     self.warpToNodeIdx(self.focusedNodeIdx);
                 }
             }
+        });
+        
+        $(document).on("keyup", function(e) {
+            if (self.$searchField.is(":focus") || e.ctrlKey || e.metaKey) {
+                return;
+            }
+            
+            // reset the allowSelectNextNode timer
+            self.allowSelectNextNode = true;
+            clearTimeout(self.startSelectNextNodeTimer);
 
-            self.translate(100);
+            if (self.editing() === null) // Not in edit mode
+            {
+                // Delete key
+                if (e.keyCode === 46 || e.key === "Delete") {
+                    // Delete selected nodes
+                    self.deleteSelectedNodes();
+                }
+
+                // Enter key
+                if (e.keyCode === 13 || e.key === "Enter")
+                {
+                    // Open the active node with enter
+                    let selectedNodes = self.getSelectedNodes();
+                    var activeNode = self.nodes()[self.focusedNodeIdx];
+                    if (selectedNodes.length > 0){
+                        self.editNode(selectedNodes[0]);
+                    } else if (activeNode !== undefined) {
+                        self.editNode(activeNode);
+                    }
+                }
+            }
+            else // In edit mode
+            {
+                // Escape key
+                if (e.keyCode === 27 || e.key === "Escape")
+                {
+                    if (self.editing() !== null) {
+                        // closes an open node
+                        self.saveNode();
+                    }
+                }
+            }
         });
 
-        $(window).on('resize', self.updateArrowsThrottled);
+        $(window).on("resize", self.updateArrowsThrottled);
 
-        $(document).on('keyup keydown mousedown mouseup', function(e) {
+        $(document).on("keyup keydown mousedown mouseup", function(e) {
             if (self.editing() != null) {
                 self.updateEditorStats();
             }
@@ -494,6 +553,10 @@ var App = function(name, version)
         // apple command key
         //$(window).on('keydown', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = true; } });
         //$(window).on('keyup', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = false; } });
+    }
+
+    this.startSelectNextNodeTimer = function() {
+        self.allowSelectNextNode = true;
     }
 
     this.getNodesConnectedTo = function(toNode)
