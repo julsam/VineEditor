@@ -1035,8 +1035,14 @@ var App = function(name, version)
                     var toY = (linked.y() + linked.tempHeight/2) * scale + offset.top;
 
                     // get the normal
-                    var distance = Math.sqrt((fromX - toX) * (fromX - toX) + (fromY - toY) * (fromY - toY));
-                    var normal = { x: (toX - fromX) / distance, y: (toY - fromY) / distance };
+                    var distance = Math.sqrt(
+                            Math.pow(fromX - toX, 2)
+                        +   Math.pow(fromY - toY, 2)
+                    );
+                    var normal = {
+                        x: (toX - fromX) / distance,
+                        y: (toY - fromY) / distance
+                    };
 
                     var dist = 110 + 160 * (1 - Math.max(Math.abs(normal.x), Math.abs(normal.y)));
 
@@ -1420,8 +1426,8 @@ var App = function(name, version)
         if (self.nodes().length > idx)
         {
             var node = self.nodes()[idx];
-            var nodeXScaled = -( node.x() * self.cachedScale );
-            var nodeYScaled = -( node.y() * self.cachedScale );
+            var nodeXScaled = -(node.x() * self.cachedScale);
+            var nodeYScaled = -(node.y() * self.cachedScale);
             var winXCenter = $(window).width() / 2;
             var winYCenter = $(window).height() / 2;
             var nodeWidthShift = node.tempWidth * self.cachedScale / 2;
@@ -1439,8 +1445,8 @@ var App = function(name, version)
         if (self.getSelectedNodes().length > idx)
         {
             var node = self.getSelectedNodes()[idx];
-            var nodeXScaled = -( node.x() * self.cachedScale );
-            var nodeYScaled = -( node.y() * self.cachedScale );
+            var nodeXScaled = -(node.x() * self.cachedScale);
+            var nodeYScaled = -(node.y() * self.cachedScale);
             var winXCenter = $(window).width() / 2;
             var winYCenter = $(window).height() / 2;
             var nodeWidthShift = node.tempWidth * self.cachedScale / 2;
