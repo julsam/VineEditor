@@ -133,43 +133,51 @@ var App = function(name, version)
         // drag node holder around
         (function()
         {
-            var dragging = false;
+            var mouseButtonDown = false;
             var offset = { x: 0, y: 0 };
             var marquee = new Marquee();
+            var leftButtonHeld = false;
+            var middleButtonHeld = false;
 
             $(".nodes").on("mousedown", function(e)
             {
-                dragging = true;
+                if (e.button == 0) {
+                    leftButtonHeld = true;
+                }
+                if (e.button == 1) {
+                    middleButtonHeld = true;
+                }
+                mouseButtonDown = true;
                 offset.x = e.pageX;
                 offset.y = e.pageY;
                 marquee.disable();
 
                 var scale = self.cachedScale;
 
-                if (!e.altKey && !e.shiftKey)
+                if (!e.altKey && !e.shiftKey && !middleButtonHeld) {
                     self.deselectAllNodes();
+                }
             });
 
             $(".nodes").on("mousemove", function(e)
             {
-                if (dragging)
+                if (mouseButtonDown)
                 {
                     //if (e.ctrlKey)
-                    if (e.altKey || e.button === 1)
+                    if (e.altKey || middleButtonHeld)
                     {
                         //prevents jumping straight back to standard dragging
                         if (!marquee.isActive())
                         {
-                            self.transformOrigin[0] += e.pageX - offset.x;
-                            self.transformOrigin[1] += e.pageY - offset.y;
                             document.body.classList.add('mouseMoveView');
+                            // self.transformOrigin[0] += e.pageX - offset.x;
+                            // self.transformOrigin[1] += e.pageY - offset.y;
 
-                            self.translate();
+                            // self.translate();
 
-                            offset.x = e.pageX;
-                            offset.y = e.pageY;
+                            // offset.x = e.pageX;
+                            // offset.y = e.pageY;
 
-                            /*
                             var nodes = self.nodes();
                             for (var i in nodes)
                             {
@@ -178,11 +186,12 @@ var App = function(name, version)
                             }
                             offset.x = e.pageX;
                             offset.y = e.pageY;
-                            */
+                            
+                            self.updateArrowsThrottled();
                         }
                     }
-                    else
-                    {	
+                    else if (leftButtonHeld)
+                    {
                         marquee.setActive(true);
 
                         var scale = self.cachedScale;
@@ -218,8 +227,8 @@ var App = function(name, version)
 
                         marquee.draw();
 
-                        //Select nodes which are within the marquee
-                        // MarqueeSelection is used to prevent it from deselecting already
+                        // Select nodes which are within the marquee
+                        // Marquee.selection is used to prevent it from deselecting already
                         // selected nodes and deselecting onces which have been selected
                         // by the marquee
                         var nodes = self.nodes();
@@ -260,8 +269,7 @@ var App = function(name, version)
 
             $(".nodes").on("mouseup", function(e)
             {
-                console.log("finished dragging");
-                dragging = false;
+                mouseButtonDown = false;
 
                 if (marquee.isActive() && marquee.selection.length == 0) {
                     self.deselectAllNodes();
@@ -269,6 +277,13 @@ var App = function(name, version)
                 document.body.classList.remove('mouseMoveView');
 
                 marquee.disable();
+
+                if (e.button == 0) {
+                    leftButtonHeld = false;
+                }
+                if (e.button == 1) {
+                    middleButtonHeld = false;
+                }
             });
         })();
 
