@@ -230,6 +230,7 @@ var Node = function()
 
     this.drag = function()
     {
+        var leftButtonHeld = false;
         var ctrlKeyDown = false;
         var dragging = false;
         var groupDragging = false;
@@ -284,11 +285,16 @@ var Node = function()
         $(self.element).on("mousedown", function (e)
         {
             moved = false;
+            if (e.button == 0) {
+                leftButtonHeld = true;
+            }
             if (e.ctrlKey) {
                 ctrlKeyDown = true;
             }
-            if (!dragging && self.active())
+            if (leftButtonHeld && !dragging && self.active())
             {
+                document.body.classList.add('mouseGrabReady');
+
                 var parent = $(self.element).parent();
 
                 dragging = true;
@@ -326,8 +332,12 @@ var Node = function()
             dragging = false;
             groupDragging = false;
             moved = false;
+            if (e.button == 0) {
+                leftButtonHeld = false;
+            }
 
             document.body.classList.remove('mouseGrabbing');
+            document.body.classList.remove('mouseGrabReady');
             app.updateArrowsThrottled();
         });
     }
