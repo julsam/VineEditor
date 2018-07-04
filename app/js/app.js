@@ -345,13 +345,11 @@ var App = function(name, version)
 
         // right click
         $(document).contextmenu( function(e) {
-            var isAllowedEl = (
-                    $(e.target).hasClass('nodes')
-                ||  $(e.target).parents('.nodes').length
-            );
-
-            if ( e.button == 2 && isAllowedEl )
+            // right click on the 'nodes' element (holding all the nodes)
+            let isAllowedEl = $(e.target).hasClass('nodes');
+            if (isAllowedEl)
             {
+                // create new node
                 var x = self.transformOrigin[0] * -1 / self.cachedScale;
                 var y = self.transformOrigin[1] * -1 / self.cachedScale;
 
