@@ -86,11 +86,12 @@ var App = function(name, version)
         }
 
         // search field
-        self.$searchField.on("keydown", function(e)
+        self.$searchField.on("keyup", function(e)
         {
             // enter
             if (e.keyCode == 13) {
                 self.searchWarp();
+                e.stopPropagation();
             }
 
             // escape
@@ -1464,6 +1465,7 @@ var App = function(name, version)
                 var node = self.nodes()[i];
                 if (node.title().toLowerCase() == search)
                 {
+                    self.$searchField.blur();
                     self.warpToNodeIdx(i);
                     return;
                 }
