@@ -633,17 +633,13 @@ var App = function(name, version)
 
     this.refreshWindowTitle = function(editingPath)
     {
-        // var gui = require('nw.gui');
         var gui = remote.getCurrentWindow();
         if (!gui) {
             return;
         }
-
         // Get the current window
-        // var win = gui.Window.get(); //Borked
         var win = remote.getCurrentWindow();
-
-        win.title = "Yarn - [" + editingPath + "] ";// + (self.dirty?"*":"");
+        win.setTitle("Vine Editor - [" + editingPath + "] ");// + (self.dirty?"*":"");
     }
 
     this.recordNodeAction = function(action, node)
