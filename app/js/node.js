@@ -22,6 +22,7 @@ var Node = function()
     this.colorID = ko.observable(0);
     this.checked = false;
     this.selected = false;
+    this.focused = false;
 
     // clipped values for display
     this.clippedTags = ko.computed(function()
@@ -113,10 +114,21 @@ var Node = function()
     {
         self.selected = select;
         
-        if(self.selected) {
-            $(self.element).css({border: "1px solid #49eff1"});
+        if (self.selected) {
+            $(self.element).addClass("selected");
         } else {
-            $(self.element).css({border: "none"});
+            $(self.element).removeClass("selected");
+        }
+    }
+
+    this.setFocus = function(focused)
+    {
+        self.focused = focused;
+        
+        if (self.focused) {
+            $(self.element).addClass("focused");
+        } else {
+            $(self.element).removeClass("focused");
         }
     }
 
@@ -218,6 +230,7 @@ var Node = function()
 
     this.drag = function()
     {
+        var ctrlKeyDown = false;
         var dragging = false;
         var groupDragging = false;
 
@@ -270,6 +283,10 @@ var Node = function()
 
         $(self.element).on("mousedown", function (e)
         {
+            moved = false;
+            if (e.ctrlKey) {
+                ctrlKeyDown = true;
+            }
             if (!dragging && self.active())
             {
                 var parent = $(self.element).parent();
@@ -292,9 +309,11 @@ var Node = function()
 
         $(self.element).on("mouseup", function (e)
         {
-            //alert("" + e.target.nodeName);
-            if (!moved) {
+            if (!ctrlKeyDown && dragging && !groupDragging) {
+                // deselect all nodes
                 app.mouseUpOnNodeNotMoved();
+                // set the selection to this node
+                app.addNodeSelected(self);
             }
 
             document.body.classList.remove('mouseGrabbing');
@@ -303,6 +322,7 @@ var Node = function()
 
         $(document.body).on("mouseup", function (e) 
         {
+            ctrlKeyDown = false;
             dragging = false;
             groupDragging = false;
             moved = false;

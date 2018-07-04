@@ -360,7 +360,22 @@ a:hover {
 }
 
 .node:hover {
-    border: 1px solid #49eff1;
+    border: 1px solid #6eaef7;
+    box-shadow: 0 0px 8px 0 rgba(11, 137, 245, 0.37);
+}
+
+.node.selected {
+    border: 1px solid #6eaef7;
+    box-shadow: 0 0px 8px 0 rgba(11, 137, 245, 0.37);
+}
+.node.focused {
+    border: 1px solid rgba(247, 148, 0, 1);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.node.selected.focused {
+    border: 1px solid rgba(247, 148, 0, 1);
+    box-shadow: 0 0px 0px 1px rgba(11, 137, 245, 1),
+                0 0px 8px 0 rgba(11, 137, 245, 0.37);
 }
 
 .node .title {

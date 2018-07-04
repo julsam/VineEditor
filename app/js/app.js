@@ -25,6 +25,7 @@ var App = function(name, version)
     //this.appleCmdKey = false;
     this.editingSaveHistoryTimeout = null;
     this.dirty = false;
+    this.focusedNode = null;
     this.focusedNodeIdx = -1;
     this.zoomSpeed = .005;
     this.zoomLimitMin = .05;
@@ -467,36 +468,37 @@ var App = function(name, version)
                 // needs more than 1 to toggle between nodes
                 let isNodeSelected = selectedNodes.length > 1;
                 let nodes = isNodeSelected ? selectedNodes : self.nodes();
-                if (self.focusedNodeIdx > -1 && nodes.length > self.focusedNodeIdx)
+                let focusedNodeIdx = nodes.indexOf(self.focusedNode);
+                if (focusedNodeIdx > -1 && nodes.length > focusedNodeIdx)
                 {
-                    let isOutOfScreenView = (
+                    let isNodeCenteredOnView = (
                             self.transformOrigin[0] !=
-                                -nodes[self.focusedNodeIdx].x() +
+                                -nodes[focusedNodeIdx].x() +
                                 $(window).width() / 2 -
-                                $(nodes[self.focusedNodeIdx].element).width() / 2
+                                $(nodes[focusedNodeIdx].element).width() / 2
                         ||  self.transformOrigin[1] !=
-                                -nodes[self.focusedNodeIdx].y() +
+                                -nodes[focusedNodeIdx].y() +
                                 $(window).height() / 2 -
-                                $(nodes[self.focusedNodeIdx].element).height() / 2
+                                $(nodes[focusedNodeIdx].element).height() / 2
                     );
-                    if (isOutOfScreenView) {
-                        self.focusedNodeIdx = -1;
+                    if (isNodeCenteredOnView) {
+                        focusedNodeIdx = -1;
                     }
                 }
                 
-                if (++self.focusedNodeIdx >= nodes.length) {
-                    self.focusedNodeIdx = 0;
+                if (++focusedNodeIdx >= nodes.length) {
+                    focusedNodeIdx = 0;
+                }
+
+                self.cachedScale = 1;
+                if (isNodeSelected) {
+                    self.warpToSelectedNodeIdx(focusedNodeIdx);
+                } else {
+                    self.warpToNodeIdx(focusedNodeIdx);
                 }
 
                 self.allowSelectNextNode = false;
                 setTimeout(self.startSelectNextNodeTimer, 300);
-
-                self.cachedScale = 1;
-                if (isNodeSelected) {
-                    self.warpToSelectedNodeIdx(self.focusedNodeIdx);
-                } else {
-                    self.warpToNodeIdx(self.focusedNodeIdx);
-                }
             }
         });
         
@@ -523,10 +525,10 @@ var App = function(name, version)
                     // Open the active node with enter
                     let selectedNodes = self.getSelectedNodes();
                     var activeNode = self.nodes()[self.focusedNodeIdx];
-                    if (selectedNodes.length > 0){
-                        self.editNode(selectedNodes[0]);
-                    } else if (activeNode !== undefined) {
+                    if (activeNode !== undefined) {
                         self.editNode(activeNode);
+                    } else if (selectedNodes.length > 0){
+                        self.editNode(selectedNodes[0]);
                     }
                 }
             }
@@ -715,6 +717,21 @@ var App = function(name, version)
         }
     }
 
+    this.setFocusByNode = function(node, focused=true)
+    {
+        self.focusedNode = null;
+        let nodes = self.nodes();
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i] === node) {
+                nodes[i].setFocus(true);
+                self.focusedNodeIdx = i;
+                self.focusedNode = nodes[i];
+            } else {
+                nodes[i].setFocus(false);
+            }
+        }
+    }
+
     this.getSelectedNodes = function()
     {
         var selectedNode = [];
@@ -750,6 +767,7 @@ var App = function(name, version)
         if (index < 0) {
             self.nodeSelection.push(node);
             node.setSelected(true);
+            self.setFocusByNode(node);
         }
     }
 
@@ -767,6 +785,10 @@ var App = function(name, version)
         var nodes = self.getSelectedNodes();
         for (var i in nodes) {
             self.removeNodeSelection(nodes[i]);
+            if (i == self.focusedNodeIdx) {
+                self.focusedNode = null;
+                self.focusedNodeIdx = -1;
+            }
             nodes[i].remove();
         }
     }
@@ -778,8 +800,9 @@ var App = function(name, version)
         if (updateArrows == undefined || updateArrows == true) {
             self.updateNodeLinks();
         }
-        
+
         self.recordNodeAction("created", node);
+        self.addNodeSelected(node);
 
         return node;
     }
@@ -794,6 +817,7 @@ var App = function(name, version)
         node.y(y-100);
         self.updateNodeLinks();
         self.recordNodeAction("created", node);
+        self.addNodeSelected(node);
 
         return node;
     }
@@ -1383,7 +1407,7 @@ var App = function(name, version)
             self.transformOrigin[0] = nodeXScaled + winXCenter - nodeWidthShift;
             self.transformOrigin[1] = nodeYScaled + winYCenter - nodeHeightShift;
             self.translate(100);
-            self.focusedNodeIdx = idx;
+            self.setFocusByNode(node, true);
         }
     }
 
@@ -1402,7 +1426,7 @@ var App = function(name, version)
             self.transformOrigin[0] = nodeXScaled + winXCenter - nodeWidthShift;
             self.transformOrigin[1] = nodeYScaled + winYCenter - nodeHeightShift;
             self.translate(100);
-            self.focusedNodeIdx = idx;
+            self.setFocusByNode(node, true);
         }
     }
 
