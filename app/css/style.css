@@ -575,8 +575,8 @@ a:hover {
     display: block;
     position: absolute;
     pointer-events: none;
-    border: 1px solid #9ec9fa;
-    background-color: rgba(10, 96, 194, 0.2);
+    border: 1px solid #6eaef7;
+    background-color: rgba(10, 96, 164, 0.2);
 }
 
 /* --- MEDIA --- */
