@@ -1,7 +1,7 @@
 
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
-const url = require('url')
-const path = require('path')
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const url = require("url");
+const path = require("path");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -34,20 +34,14 @@ function createWindow () {
     });
     // Hide the menu
     //mainWindow.setMenu(null);
-    
-    // and load the index.html of the app.
-    // mainWindow.loadURL(url.format({
-    //   pathname: path.join(__dirname, 'app/index.html'),
-    //   protocol: 'file',
-    //   slashes: true
-    // }));
-    mainWindow.loadFile('app/index.html');
+
+    mainWindow.loadFile("app/index.html");
     
     // While loading the page, the ready-to-show event will be emitted when the
     // renderer process has rendered the page for the first time if the window has
     // not been shown yet. Showing the window after this event will have no visual
     // flash
-    mainWindow.once('ready-to-show', () => {
+    mainWindow.once("ready-to-show", () => {
         mainWindow.show();
         //mainWindow.maximize();
     })
@@ -55,7 +49,7 @@ function createWindow () {
     // Open the DevTools.
     //mainWindow.webContents.openDevTools({mode:'bottom'});
     
-    mainWindow.on('close', function (event) {
+    mainWindow.on("close", function (event) {
         event.preventDefault();
         if (yarnRunnerWindow) {
             yarnRunnerWindow.destroy();
@@ -145,10 +139,9 @@ function createYarnTesterWindow(content, startTestNode){
     });
     
     yarnRunnerWindow.loadURL(`file://${__dirname}/app/renderer.html`);
-    yarnRunnerWindow.webContents.openDevTools();
     
-    yarnRunnerWindow.webContents.on('dom-ready', () => {
-        yarnRunnerWindow.webContents.send('loadYarnDataOnRunner', content,startTestNode);
+    yarnRunnerWindow.webContents.on("dom-ready", () => {
+        yarnRunnerWindow.webContents.send("loadYarnDataOnRunner", content,startTestNode);
         yarnRunnerWindow.show();
         // yarnRunnerWindow.maximize();
     });
@@ -157,18 +150,18 @@ function createYarnTesterWindow(content, startTestNode){
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on("ready", createWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on("window-all-closed", function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
+    if (process.platform !== "darwin") {
         app.quit();
     }
 })
 
-app.on('activate', function () {
+app.on("activate", function () {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
