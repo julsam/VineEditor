@@ -211,8 +211,12 @@
 
         <!-- start it all up! -->
         <script type="text/javascript">
-            var app = new App("Vine Editor", "0.0.1");
-            app.run();
+            let ipcRenderer = require("electron").ipcRenderer;
+            var app;
+            ipcRenderer.on("launchApp", function(event, version) {
+                app = new App("Vine Editor", version);
+                app.run();
+            });
         </script>
 
     </body>

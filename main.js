@@ -7,6 +7,7 @@ const path = require("path");
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let yarnRunnerWindow;
+let versionNumber = require('./package.json').version;
 
 const fileFilters = [
     { name: "Any Accepted Formats", extensions: [
@@ -43,12 +44,15 @@ function createWindow () {
     // flash
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
-        //mainWindow.maximize();
-    })
-
     // Open the DevTools.
     //mainWindow.webContents.openDevTools({mode:'bottom'});
+    });
     
+    mainWindow.webContents.on("dom-ready", () => {
+        // launch the app with the current version number
+        mainWindow.webContents.send("launchApp", versionNumber);
+    });
+
     mainWindow.on("close", function (event) {
         event.preventDefault();
         if (yarnRunnerWindow) {
@@ -57,12 +61,6 @@ function createWindow () {
         mainWindow.destroy();
         mainWindow = null;
     });
-    
-    // mainWindow.webContents.on('dom-ready', () => { // in case you want to send data to yarn window on init
-    //   mainWindow.webContents.send('loadYarnDataObject', yarnData);
-    //   mainWindow.show();
-    //   mainWindow.maximize();
-    // });
     
     ipcMain.on("openFileDialog", (event, operation) => {
         console.log("Open file");
