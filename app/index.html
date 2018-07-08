@@ -195,9 +195,12 @@
             <div id="marquee"></div>
         </div>
 
-        <!-- Hidden fields, file dialogs, and elements -->
+        <!-- Hidden fields, file dialogs, and elements.
+            Not used since the electron port, but should probably keep it
+            for a browser version?
+        -->
         <div class="hidden">
-            <input type="file" id="open-file" accept=".txt,.xml,.json,.twee,.tw2"/>
+            <input type="file" id="open-file" accept=".txt,.xml,.json,.twee,.tw2,.vine"/>
             <input type="file" id="open-folder" webkitdirectory directory/>
             <input type="file" id="save-file" nwsaveas="filename.txt" />
         </div>

@@ -1,17 +1,20 @@
 var FILETYPE = { JSON: "json", XML: "xml", TWEE: "twee", TWEE2: "tw2", UNKNOWN: "none", YARNTEXT: "yarn.txt" };
 
-const ipc = require('electron').ipcRenderer;
+const ipc = require("electron").ipcRenderer;
 
-ipc.on('selected-file', function(event, path, operation) {
-    if (operation == 'tryOpenFile') {
-        data.openFile($('#open-file'), path);
+ipc.on("loadFileFromDisk", function(event, path, operation) {
+    if (operation == "tryOpenFile") {
+        data.openFile(event, path);
     }
-    else if (operation == 'tryAppend') {
-        data.openFileDialog($('#open-file'), path);
+    else if (operation == "tryAppendFile") {
+        data.appendFile(event, path);
+    }
+    else if (operation == "tryOpenFolder") {
+        data.openFolder(event, path);
     }
 });
 
-ipc.on('saved-file', function(event, path, type, content) {
+ipc.on("saveFileToDisk", function(event, path, type, content) {
     data.editingType(type);
     data.saveTo(path, content);
     app.refreshWindowTitle(path);
@@ -443,6 +446,7 @@ var data =
         }
     },
 
+    // Not used since electron port TODO: should be removed?
     openFileDialog: function(dialog, callback)
     {
         dialog.bind("change", function(e)
@@ -471,13 +475,9 @@ var data =
         dialog.trigger("click");
     },
 
+    // Not used since electron port TODO: should be removed?
     saveFileDialog: function(dialog, type, content)
     {
-        if (ipc) {
-            var file = 'file.' + type;
-            ipc.send('saveFileYarn',type,content);
-            return;
-        }
         if (app.fs)
         {
             dialog.attr("nwsaveas", file);
@@ -504,27 +504,27 @@ var data =
         }
     },
 
-    tryOpenFile: function() /// Refactor to send signal to the main process
+    tryOpenFile: function()
     {
-        ipc.send('openFileYarn', 'tryOpenFile');
+        ipc.send("openFileDialog", "tryOpenFile");
         // data.openFileDialog($('#open-file'), data.openFile);
-    },
-
-    tryOpenFolder: function()
-    {
-        data.openFileDialog($('#open-folder'), data.openFolder);
     },
 
     tryAppend: function()
     {
-        ipc.send('openFileYarn', 'tryAppend');
-        // data.openFileDialog($('#open-file'), data.appendFile);
+        ipc.send("appendFileDialog", "tryAppendFile");
+    },
+
+    tryOpenFolder: function()
+    {
+        ipc.send("openDirectoryDialog", "tryOpenFolder");
     },
 
     trySave: function(type)
     {
         data.editingType(type);
-        data.saveFileDialog($('#save-file'), type, data.getSaveData(type));
+        // data.saveFileDialog($('#save-file'), type, data.getSaveData(type));
+        ipc.send("saveFileDialog", type, data.getSaveData(type));
     },
 
     trySaveCurrent: function()

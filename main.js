@@ -8,6 +8,19 @@ const path = require('path')
 let mainWindow;
 let yarnRunnerWindow;
 
+const fileFilters = [
+    { name: "Any Accepted Formats", extensions: [
+        "json", "vine", "yarn.txt", "xml", "tw2", "txt"
+    ] },
+    { name: "JSON", extensions: ["json"] },
+    { name: "VineScript", extensions: ["vine"] },
+    { name: "YarnText", extensions: ["yarn.txt"] },
+    { name: "XML", extensions: ["xml"] },
+    { name: "Twee2", extensions: ["tw2"] },
+    { name: "Text", extensions: ["txt"] },
+    { name: "All Files", extensions: ["*"] }
+];
+
 function createWindow () {
     // Create the browser window.
     mainWindow =  new BrowserWindow({
@@ -57,35 +70,67 @@ function createWindow () {
     //   mainWindow.maximize();
     // });
     
-    ipcMain.on('openFileYarn', (event, operation) => {
+    ipcMain.on("openFileDialog", (event, operation) => {
         console.log("Open file");
         dialog.showOpenDialog({
-            properties: ['openFile']
+            properties: ["openFile"],
+            // defaultPath: "",
+            filters: fileFilters
         }, function (files) {
-            if (files) {
-                mainWindow.webContents.send('selected-file', files[0], operation);
+            if (files !== undefined) {
+                mainWindow.webContents.send("loadFileFromDisk", files[0], operation);
             }
         });
-    }); 
+    });
     
-    ipcMain.on('saveFileYarn', (event, type, content) => {
-        dialog.showSaveDialog(mainWindow,
-            { filters: [{ name: 'story', extensions: [type] }]},
-            function(filepath) {
-                mainWindow.webContents.send('saved-file', filepath, type, content);
-            });
+    ipcMain.on("appendFileDialog", (event, operation) => {
+        console.log("Append file");
+        dialog.showOpenDialog({
+            properties: ["openFile", "multiSelections"],
+            // defaultPath: "",
+            filters: fileFilters
+        }, function (files) {
+            if (files !== undefined) {
+                for (var i = 0; i < files.length; i++) {
+                    mainWindow.webContents.send("loadFileFromDisk", files[i], operation);
+                }
+            }
         });
-        
-        ipcMain.on('sendYarnDataToObject', (event, content, startTestNode) => { // in case you wanna export yarn object to another embedded app
-            // otherApp.webContents.send('yarnSavedStory',content);
-            // mainWindow.close();
-        })
-        
-        ipcMain.on('testYarnStoryFrom' ,(event, content, startTestNode) => {
-            createYarnTesterWindow(content,startTestNode);
-        })
-        
-    }
+    });
+    
+    ipcMain.on("openDirectoryDialog", (event, operation) => {
+        console.log("Open Directory");
+        dialog.showOpenDialog({
+            properties: ["openDirectory", "multiSelections"],
+            filters: fileFilters // useless for directories?
+        }, function (dirs) {
+            if (dirs !== undefined) {
+                for (var i = 0; i < dirs.length; i++) {
+                    mainWindow.webContents.send("loadFileFromDisk", dirs[i], operation);
+                }
+            }
+        });
+    });
+    
+    ipcMain.on("saveFileDialog", (event, type, content) => {
+        dialog.showSaveDialog(mainWindow, {
+            filters: [{ name: "story", extensions: [type] }] 
+        }, function(filepath) {
+            if (filepath !== undefined) {
+                mainWindow.webContents.send("saveFileToDisk", filepath, type, content);
+            }
+        });
+    });
+
+    ipcMain.on("sendYarnDataToObject", (event, content, startTestNode) => { // in case you wanna export yarn object to another embedded app
+        // otherApp.webContents.send("yarnSavedStory",content);
+        // mainWindow.close();
+    })
+    
+    ipcMain.on("testYarnStoryFrom" ,(event, content, startTestNode) => {
+        createYarnTesterWindow(content,startTestNode);
+    });
+}
     
 function createYarnTesterWindow(content, startTestNode){
     // console.log("START RUN::"+startTestNode);
