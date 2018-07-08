@@ -3,6 +3,7 @@
 const electron = require('electron');
 const remote = electron.remote;
 const Marquee = require('./js/marquee');
+const Draw = require('./js/draw');
 
 var App = function(name, version)
 {
@@ -1033,27 +1034,20 @@ var App = function(name, version)
                     var from = { x: fromX + normal.x * dist * scale, y: fromY + normal.y * dist * scale };
                     var to = { x: toX - normal.x * dist * scale, y: toY - normal.y * dist * scale };
 
-                    self.context.strokeStyle = "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")";
-                    self.context.fillStyle = "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")";
-
-                    // draw line
-                    self.context.beginPath();
-                    self.context.moveTo(from.x, from.y);
-                    self.context.lineTo(to.x, to.y);
-                    self.context.stroke();
-
-                    // draw arrow
-                    self.context.beginPath();
-                    self.context.moveTo(to.x + normal.x * 4, to.y + normal.y * 4);
-                    self.context.lineTo(
-                        to.x - normal.x * 16 * scale - normal.y * 12 * scale,
-                        to.y - normal.y * 16 * scale + normal.x * 12 * scale
+                    // draw straight line
+                    // Draw.drawStraightLine(self.context, from, to, scale, normal,
+                    //     "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
+                    // );
+                    
+                    // // draw quadratic line
+                    Draw.drawQuadraticLine(self.context, from, to, scale,
+                        "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
                     );
-                    self.context.lineTo(
-                        to.x - normal.x * 16 * scale + normal.y * 12 * scale,
-                        to.y - normal.y * 16 * scale - normal.x * 12 * scale
-                    );
-                    self.context.fill();
+                    
+                    // draw bezier line
+                    // Draw.drawBezierLine(self.context, from, to, scale,
+                    //     "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
+                    // );
                 }
             }
         }
