@@ -242,8 +242,6 @@ var Node = function()
         {
             if (dragging)
             {
-                document.body.classList.add('mouseGrabbing');
-                
                 var parent = $(self.element).parent();
                 var newX = (e.pageX / self.getScale() - offset[0]);
                 var newY = (e.pageY / self.getScale() - offset[1]);
@@ -295,7 +293,7 @@ var Node = function()
             // the click target is not a button (with the class icon)
             if (leftButtonHeld && !dragging && self.active() && !$(e.target).hasClass("icon"))
             {
-                document.body.classList.add('mouseGrabReady');
+                document.body.classList.add('mouseGrabbing');
 
                 var parent = $(self.element).parent();
 
@@ -339,7 +337,6 @@ var Node = function()
             }
 
             document.body.classList.remove('mouseGrabbing');
-            document.body.classList.remove('mouseGrabReady');
             app.updateArrowsThrottled();
         });
     }
