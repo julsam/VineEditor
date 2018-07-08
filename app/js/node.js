@@ -6,7 +6,7 @@ const ClipNodeTextLength = 1024;
 var Node = function()
 {
     var self = this;
-    this.titleColorValues = ['#eee','#6EA5E0','#9EDE74','#FFE374','#F7A666','#C47862','#97E1E9'];
+    this.titleColorValues = ['#EEE', '#6EA5E0', '#C39BDF', '#DB9DBE', '#F0756A', '#F7A666', '#FAD070', '#F7FDC9', '#9EDE74', '#60C1E4'];
     // primary values
     this.index = ko.observable(globalNodeIndex++);
     this.title = ko.observable("Node" + this.index());
@@ -206,14 +206,14 @@ var Node = function()
     {
         self.colorID(self.colorID() - 1);
         if (self.colorID() < 0) {
-            self.colorID(6);
+            self.colorID(this.titleColorValues.length - 1);
         }
     }
 
     this.doCycleColorUp = function()
     {
         self.colorID(self.colorID() + 1);
-        if (self.colorID() > 6) {
+        if (self.colorID() >= this.titleColorValues.length) {
             self.colorID(0);
         }
     }
