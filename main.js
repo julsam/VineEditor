@@ -2,6 +2,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const url = require("url");
 const path = require("path");
+const isDev = require("electron-is").dev();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -44,8 +45,9 @@ function createWindow () {
     // flash
     mainWindow.once("ready-to-show", () => {
         mainWindow.show();
-    // Open the DevTools.
-    //mainWindow.webContents.openDevTools({mode:'bottom'});
+        if (isDev) {
+            mainWindow.webContents.openDevTools({mode: "bottom"});
+        }
     });
     
     mainWindow.webContents.on("dom-ready", () => {
