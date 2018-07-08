@@ -48,11 +48,16 @@ class Marquee
 
     setActive(value) {
         this.active = value;
+        if (value == true) {
+            document.body.classList.add('mouseMarquee');
+        } else {
+            document.body.classList.remove('mouseMarquee');
+        }
     }
 
     disable() {
         $("#marquee").css({x:0, y:0, width:0, height:0});
-        this.active = false;
+        this.setActive(false);
         this.rect = { x1: 0, y1:0, x2:0, y2:0 };
         this.selection = [];
     }

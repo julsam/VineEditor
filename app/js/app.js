@@ -178,7 +178,9 @@ var App = function(name, version)
                     }
                     else if (leftButtonHeld)
                     {
-                        marquee.setActive(true);
+                        if (!marquee.isActive()) {
+                            marquee.setActive(true);
+                        }
 
                         var scale = self.cachedScale;
 

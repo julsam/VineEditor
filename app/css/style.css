@@ -20,6 +20,11 @@ body.mouseGrabbing * {
     cursor: -webkit-grabbing !important;
 }
 
+/* Marquee cursor */
+body.mouseMarquee * {
+    cursor: crosshair !important;
+}
+
 #app-bg {
     position: fixed;
     top: 0px;
