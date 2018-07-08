@@ -238,7 +238,7 @@ var Node = function()
         var offset = [0, 0];
         var moved = false;
 
-        $(document.body).on("mousemove", function(e) 
+        $(document.body).on("mousemove", function(e)
         {
             if (dragging)
             {
@@ -282,7 +282,7 @@ var Node = function()
             }
         });
 
-        $(self.element).on("mousedown", function (e)
+        $(self.element).on("mousedown", function(e)
         {
             moved = false;
             if (e.button == 0) {
@@ -291,7 +291,9 @@ var Node = function()
             if (e.ctrlKey) {
                 ctrlKeyDown = true;
             }
-            if (leftButtonHeld && !dragging && self.active())
+            // checks that the left button is pressed, the node is active and
+            // the click target is not a button (with the class icon)
+            if (leftButtonHeld && !dragging && self.active() && !$(e.target).hasClass("icon"))
             {
                 document.body.classList.add('mouseGrabReady');
 
@@ -313,7 +315,7 @@ var Node = function()
             e.stopPropagation();
         });
 
-        $(self.element).on("mouseup", function (e)
+        $(self.element).on("mouseup", function(e)
         {
             if (!ctrlKeyDown && dragging && !groupDragging) {
                 // deselect all nodes
@@ -326,7 +328,7 @@ var Node = function()
             moved = false;
         });
 
-        $(document.body).on("mouseup", function (e) 
+        $(document.body).on("mouseup", function(e)
         {
             ctrlKeyDown = false;
             dragging = false;
