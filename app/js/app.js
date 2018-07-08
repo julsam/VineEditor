@@ -32,7 +32,7 @@ var App = function(name, version)
     this.zoomLimitMax = 1;
     this.transformOrigin = [0, 0];
     this.shifted = false;
-    this.isNwjs = false;
+    this.isElectron = false;
     self.allowSelectNextNode = true; // allows toggle nodes with spacebar
     
     this.UPDATE_ARROWS_THROTTLE_MS = 25;
@@ -43,21 +43,16 @@ var App = function(name, version)
 
     this.$searchField = $("#app-search-field");
 
-    // node-webkit
+    // checks that we are in a desktop app (as opposed to in a browser)
     if (typeof(require) == "function")
     {
-        // this.gui = require('nw.gui');
         this.gui = remote.getCurrentWindow();
         this.fs = remote.require('fs');
-        //console.log(this.fs);
-        this.isNwjs = true;
+        this.isElectron = true;
     }
 
     this.run = function()
     {
-        //TODO(Al):
-        // delete mutliple nodes at the same time
-
         var osName = "Unknown OS";
         if (navigator.platform.indexOf("Win") != -1) osName="Windows";
         if (navigator.platform.indexOf("Mac") != -1) osName="MacOS";
@@ -378,7 +373,7 @@ var App = function(name, version)
         
         // Shortcuts for Saving/Opening files
         $(document).on('keydown', function(e) {
-            if (self.isNwjs === false) {
+            if (self.isElectron === false) {
                 return;
             }
             
@@ -615,21 +610,19 @@ var App = function(name, version)
 
     this.quit = function()
     {
-        if (self.gui != undefined)
-        {
-            self.gui.App.quit();
+        if (self.isElectron) {
+            remote.app.quit();
         }
     }
 
     this.refreshWindowTitle = function(editingPath)
     {
-        var gui = remote.getCurrentWindow();
-        if (!gui) {
-            return;
+        let title = "Vine Editor - [" + editingPath + "] ";
+        if (!self.isElectron) {
+            document.title = title;
+        } else {
+            self.gui.setTitle(title);
         }
-        // Get the current window
-        var win = remote.getCurrentWindow();
-        win.setTitle("Vine Editor - [" + editingPath + "] ");
     }
 
     this.recordNodeAction = function(action, node)
