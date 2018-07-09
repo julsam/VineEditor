@@ -184,33 +184,37 @@ var App = function(name, version)
 
                         var scale = self.cachedScale;
 
-                        if (e.pageX > offset.x && e.pageY < offset.y) 
+                        if (e.pageX >= offset.x && e.pageY <= offset.y) 
                         {
+                            // top-right direction
                             marquee.rect.x1 = offset.x;
                             marquee.rect.y1 = e.pageY;
                             marquee.rect.x2 = e.pageX;
                             marquee.rect.y2 = offset.y;
                         }
-                        else if (e.pageX > offset.x && e.pageY > offset.y)
+                        else if (e.pageX >= offset.x && e.pageY >= offset.y)
                         {
+                            // bottom-right direction
                             marquee.rect.x1 = offset.x;
                             marquee.rect.y1 = offset.y;
                             marquee.rect.x2 = e.pageX;
                             marquee.rect.y2 = e.pageY;
                         }
-                        else if (e.pageX < offset.x && e.pageY < offset.y)
+                        else if (e.pageX <= offset.x && e.pageY <= offset.y)
                         {
+                            // top-left direction
                             marquee.rect.x1 = e.pageX;
                             marquee.rect.y1 = e.pageY;
                             marquee.rect.x2 = offset.x;
                             marquee.rect.y2 = offset.y;
                         }
-                        else
+                        else if (e.pageX <= offset.x && e.pageY >= offset.y)
                         {
+                            // bottom-left direction
                             marquee.rect.x1 = e.pageX;
                             marquee.rect.y1 = offset.y;
                             marquee.rect.x2 = offset.x;
-                            marquee.rect.y2 = e.pageY;	
+                            marquee.rect.y2 = e.pageY;
                         }
 
                         marquee.draw();
