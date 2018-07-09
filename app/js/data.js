@@ -84,6 +84,10 @@ var data =
     {
         data.readFile(e, filename, true);
         app.refreshWindowTitle(filename);
+
+        // update search to disable the new nodes,
+        // wait 300ms for them to be created / animated
+        setTimeout(app.updateSearch, 300);
     },
 
     openFolder: function(e, foldername)
@@ -95,6 +99,10 @@ var data =
     appendFile: function(e, filename)
     {
         data.readFile(e, filename, false);
+        
+        // update search to disable the new nodes,
+        // wait 300ms for them to be created / animated
+        setTimeout(app.updateSearch, 300);
     },
 
     getFileType: function(filename)

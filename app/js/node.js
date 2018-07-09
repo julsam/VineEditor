@@ -69,14 +69,13 @@ var Node = function()
         self.x(-parent.offset().left + $(window).width() / 2 - 100);
         self.y(-parent.offset().top + $(window).height() / 2 - 100);
 
-
         var updateArrowsInterval = setInterval(app.updateArrowsThrottled, 16);
 
         $(self.element)
             .css({opacity: 0, scale: 0.8, y: "-=80px", rotate: "45deg"})
             .transition(
                 {
-                    opacity: 1,
+                    opacity: self.active() ? 1 : 0.25,
                     scale: 1,
                     y: "+=80px",
                     rotate: "0deg"

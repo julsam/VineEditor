@@ -223,7 +223,7 @@ var App = function(name, version)
                         // Marquee.selection is used to prevent it from deselecting already
                         // selected nodes and deselecting onces which have been selected
                         // by the marquee
-                        var nodes = self.nodes();
+                        var nodes = self.getActiveNodes();
                         for (var i in nodes)
                         {
                             var index = marquee.selection.indexOf(nodes[i]);
@@ -349,6 +349,9 @@ var App = function(name, version)
                 y += event.pageY / self.cachedScale;
 
                 self.newNodeAt(x, y);
+                
+                // new node could be inactive if it doesn't match the current search
+                self.updateSearch();
             }
 
             return !isAllowedEl;
@@ -473,7 +476,7 @@ var App = function(name, version)
                 let selectedNodes = self.getSelectedNodes();
                 // needs more than 1 to toggle between nodes
                 let isNodeSelected = selectedNodes.length > 1;
-                let nodes = isNodeSelected ? selectedNodes : self.nodes();
+                let nodes = isNodeSelected ? selectedNodes : self.getActiveNodes();
                 let focusedNodeIdx = nodes.indexOf(self.focusedNode);
                 if (focusedNodeIdx > -1 && nodes.length > focusedNodeIdx)
                 {
@@ -530,10 +533,10 @@ var App = function(name, version)
                 {
                     // Open the active node with enter
                     let selectedNodes = self.getSelectedNodes();
-                    var activeNode = self.nodes()[self.focusedNodeIdx];
+                    var activeNode = self.getActiveNodes()[self.focusedNodeIdx];
                     if (activeNode !== undefined) {
                         self.editNode(activeNode);
-                    } else if (selectedNodes.length > 0){
+                    } else if (selectedNodes.length > 0) {
                         self.editNode(selectedNodes[0]);
                     }
                 }
@@ -729,13 +732,13 @@ var App = function(name, version)
         }
     }
 
-    this.setFocusByNode = function(node, focused=true)
+    this.setFocusByNode = function(node, value=true)
     {
         self.focusedNode = null;
         let nodes = self.nodes();
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i] === node) {
-                nodes[i].setFocus(true);
+                nodes[i].setFocus(value);
                 self.focusedNodeIdx = i;
                 self.focusedNode = nodes[i];
             } else {
@@ -755,9 +758,30 @@ var App = function(name, version)
         return selectedNode;
     }
 
+    this.getActiveNodes = function()
+    {
+        let activeNodes = [];
+        let nodes = self.nodes();
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].active()) {
+                activeNodes.push(nodes[i]);
+            }
+        }
+        return activeNodes;
+    }
+
+    this.removeInactiveNodesFromSelection = function()
+    {
+        for (let i = self.nodeSelection.length - 1; i >= 0; i--) {
+            if (!self.nodeSelection[i].active()) {
+                self.removeNodeSelection(self.nodeSelection[i]);
+            }
+        }
+    }
+
     this.deselectAllNodes = function()
     {
-        var nodes = self.nodes();
+        var nodes = self.getSelectedNodes();
         for (var i in nodes) {
             self.removeNodeSelection(nodes[i]);
         }
@@ -765,7 +789,7 @@ var App = function(name, version)
 
     this.selectAllNodes = function()
     {
-        var nodes = self.nodes();
+        var nodes = self.getActiveNodes();
         self.deselectAllNodes();
         for (var i in nodes) {
             self.nodeSelection.push(nodes[i]);
@@ -948,9 +972,9 @@ var App = function(name, version)
         var on = 1;
         var off = 0.25;
 
-        for (var i = 0; i < app.nodes().length; i ++)
+        for (var i = 0; i < self.nodes().length; i++)
         {
-            var node = app.nodes()[i];
+            var node = self.nodes()[i];
             var element = $(node.element);
 
             if (search.length > 0 && (title || body || tags))
@@ -963,22 +987,26 @@ var App = function(name, version)
                 {
                     node.active(true);
                     element.clearQueue();
-                    element.transition({opacity: on}, 500);
+                    element.transition({opacity: on}, 300);
                 }
                 else
                 {
+                    if (node.focused) {
+                        self.setFocusByNode(node, false);
+                    }
                     node.active(false);
                     element.clearQueue();
-                    element.transition({opacity: off}, 500);
+                    element.transition({opacity: off}, 300);
                 }
             }
             else
             {
                 node.active(true);
                 element.clearQueue();
-                element.transition({opacity: on}, 500);
+                element.transition({opacity: on}, 300);
             }
         }
+        self.removeInactiveNodesFromSelection();
     }
 
     this.updateNodeLinks = function()
@@ -1406,9 +1434,9 @@ var App = function(name, version)
 
     this.warpToNodeIdx = function(idx)
     {
-        if (self.nodes().length > idx)
+        if (self.getActiveNodes().length > idx)
         {
-            var node = self.nodes()[idx];
+            var node = self.getActiveNodes()[idx];
             var nodeXScaled = -(node.x() * self.cachedScale);
             var nodeYScaled = -(node.y() * self.cachedScale);
             var winXCenter = $(window).width() / 2;
