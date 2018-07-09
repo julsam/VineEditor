@@ -749,13 +749,11 @@ var App = function(name, version)
 
     this.getSelectedNodes = function()
     {
-        var selectedNode = [];
-
+        var selectedNodes = [];
         for (var i in self.nodeSelection) {
-            selectedNode.push(self.nodeSelection[i]);
+            selectedNodes.push(self.nodeSelection[i]);
         }
-
-        return selectedNode;
+        return selectedNodes;
     }
 
     this.getActiveNodes = function()
@@ -911,32 +909,35 @@ var App = function(name, version)
 
     this.openNodeListMenu = function(action) 
     {
-        var helperLinkSearch = document.getElementById(action+'HelperMenuFilter').value;
-        var rootMenu = document.getElementById(action+'HelperMenu');
+        var helperLinkSearch = document.getElementById(action + "HelperMenuFilter").value;
+        var rootMenu = document.getElementById(action + "HelperMenu");
         for (let i = rootMenu.childNodes.length - 1; i > 1; i--) {
             rootMenu.removeChild(rootMenu.childNodes[i]);
         }
         app.nodes().forEach((node, i) =>
         {
-            if (node.title().toLowerCase().indexOf(helperLinkSearch) >= 0 || helperLinkSearch.length == 0)
+            if (    node.title().toLowerCase().indexOf(helperLinkSearch) >= 0
+                ||  helperLinkSearch.length == 0)
             {
-                var p = document.createElement('span');
+                var p = document.createElement("span");
                 p.innerHTML = node.title();
-                p.setAttribute('class', 'item');
+                p.setAttribute("class", "item");
                 var pColor = node.titleColorValues[app.nodes()[i].colorID()];
-                p.setAttribute('style' ,'background:'+pColor+';');
+                p.setAttribute("style", "background:" + pColor + ";");
 
                 if (action == "link")
                 {
                     if (node.title() !== self.editing().title()) {
-                        p.setAttribute('onclick', "app.appendText('" + node.title() + "')");
+                        p.setAttribute("onclick", "app.appendText('" + node.title() + "')");
                         rootMenu.appendChild(p);
                     }
                 }
                 else if (action == "run")
                 {
-                    if (node.title().toLowerCase().indexOf(helperLinkSearch) >= 0 || helperLinkSearch.length == 0 ){
-                        p.setAttribute('onclick', "app.testRunFrom('" + node.title() + "')");
+                    if (    node.title().toLowerCase().indexOf(helperLinkSearch) >= 0
+                        ||  helperLinkSearch.length == 0)
+                    {
+                        p.setAttribute("onclick", "app.testRunFrom('" + node.title() + "')");
                         rootMenu.appendChild(p);
                     }
                 }
@@ -1472,10 +1473,9 @@ var App = function(name, version)
 
     this.warpToNodeXY = function(x, y)
     {
-        //alert("warp to x, y: " + x + ", " + y);
         const nodeWidth = 100, nodeHeight = 100;
-        var nodeXScaled = -( x * self.cachedScale );
-        var nodeYScaled = -( y * self.cachedScale );
+        var nodeXScaled = -(x * self.cachedScale);
+        var nodeYScaled = -(y * self.cachedScale);
         var winXCenter = $(window).width() / 2;
         var winYCenter = $(window).height() / 2;
         var nodeWidthShift = nodeWidth * self.cachedScale / 2;
@@ -1484,7 +1484,6 @@ var App = function(name, version)
         self.transformOrigin[0] = nodeXScaled + winXCenter - nodeWidthShift;
         self.transformOrigin[1] = nodeYScaled + winYCenter - nodeHeightShift;
 
-        //alert("self.transformOrigin[0]: " + self.transformOrigin[0]);
         self.translate(100);
     }
 
@@ -1502,10 +1501,12 @@ var App = function(name, version)
             for (var i in self.nodes())
             {
                 var node = self.nodes()[i];
+                // TODO maybe warp to nodes even if there's > 1 result
                 if (node.title().toLowerCase() == search)
                 {
                     self.$searchField.blur();
                     self.warpToNodeIdx(i);
+                    // TODO select & focus on the found node(s)?
                     return;
                 }
             }
