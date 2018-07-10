@@ -1,21 +1,22 @@
 {
-    "name": "yarn",
-    "version": "0.2.5",
+    "name": "vine-editor",
+    "productName": "Vine Editor",
+    "version": "0.0.1",
     "main": "main.js",
-    "description": "Dialogue editor created for \"Night in the Woods\" (and other projects) by @NoelFB and @infinite_ammo with contributions from @seiyria and @beeglebug. It is heavily inspired by and based on the amazing Twine software: http://twinery.org/. This version has been ported over to Electron and extended with further functionality by Todor Imreorov",
+    "description": "Dialogue editor for VineScript. Fork of Yarn (https://github.com/InfiniteAmmoInc/Yarn).",
     "scripts": {
         "start": "electron ."
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/blurymind/Yarn.git"
+        "url": "git+https://github.com/julsam/VineEditor.git"
     },
-    "author": "Todor Imreorov",
+    "author": "@julsam",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/blurymind/Yarn/issues"
+        "url": "https://github.com/julsam/VineEditor/issues"
     },
-    "homepage": "https://github.com/blurymind/Yarn#readme",
+    "homepage": "https://github.com/julsam/VineEditor#readme",
     "devDependencies": {
         "electron": "^2.0.2"
     },
