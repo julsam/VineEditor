@@ -49,9 +49,9 @@ class Marquee
     setActive(value) {
         this.active = value;
         if (value == true) {
-            document.body.classList.add('mouseMarquee');
+            document.body.classList.add("mouseMarquee");
         } else {
-            document.body.classList.remove('mouseMarquee');
+            document.body.classList.remove("mouseMarquee");
         }
     }
 

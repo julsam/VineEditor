@@ -20,7 +20,7 @@ ipc.on("saveFileToDisk", function(event, path, type, content) {
     app.refreshWindowTitle(path);
 });
 
-ipc.on('loadYarnDataObject', function(event, yarnData) {
+ipc.on("loadYarnDataObject", function(event, yarnData) {
     console.log("Loading YARN data From Game engine...");
     data.loadData(JSON.stringify(yarnData), FILETYPE.JSON, true);
 });
@@ -198,7 +198,7 @@ var data =
                         if (obj == null) {
                             obj = {};
                         }
-                        var xy = lines[i].substr(9, lines[i].length-9).split(',');
+                        var xy = lines[i].substr(9, lines[i].length-9).split(",");
                         obj.position = { x: Number(xy[0].trim()), y: Number(xy[1].trim()) };
                     }
                     else if (lines[i].indexOf("colorID:") > -1)
@@ -262,7 +262,7 @@ var data =
 
                     if (openPosition > 0 && closePosition > 0)
                     {
-                        var coordinates = lines[i].substr(openPosition + 1, closePosition - openPosition - 1).split(',');
+                        var coordinates = lines[i].substr(openPosition + 1, closePosition - openPosition - 1).split(",");
                         position.x = parseInt(coordinates[0]);
                         position.y = parseInt(coordinates[1]);
                     }
@@ -292,7 +292,7 @@ var data =
                 else if (obj != null)
                 {
                     if (obj.body.length > 0) {
-                        lines[i] += '\n';
+                        lines[i] += "\n";
                     }
                     obj.body += lines[i];
                 }
@@ -388,7 +388,7 @@ var data =
                 output += "---\n";
                 output += content[i].body;
                 var body = content[i].body;
-                if (!(body.length > 0 && body[body.length-1] == '\n'))
+                if (!(body.length > 0 && body[body.length-1] == "\n"))
                 {
                     output += "\n";
                 }
@@ -422,7 +422,7 @@ var data =
         }
         else if (type == FILETYPE.XML)
         {
-            output += '<nodes>\n';
+            output += "<nodes>\n";
             for (i = 0; i < content.length; i ++)
             {
                 output += "\t<node>\n";
@@ -430,10 +430,10 @@ var data =
                 output += "\t\t<tags>" + content[i].tags + "</tags>\n";
                 output += "\t\t<body>" + content[i].body + "</body>\n";
                 output += '\t\t<position x="' + content[i].position.x + '" y="' + content[i].position.y + '"></position>\n';
-                output += '\t\t<colorID>' + content[i].colorID + '</colorID>\n';
+                output += "\t\t<colorID>" + content[i].colorID + "</colorID>\n";
                 output += "\t</node>\n";
             }
-            output += '</nodes>\n';
+            output += "</nodes>\n";
         }
 
         return output;
@@ -443,8 +443,7 @@ var data =
     {
         if (app.fs != undefined)
         {
-            console.log(app.fs);
-            app.fs.writeFile(path, content, {encoding: 'utf-8'}, function(err)
+            app.fs.writeFile(path, content, {encoding: "utf-8"}, function(err)
             {
                 data.editingPath(path);
                 if(err) {
@@ -464,8 +463,8 @@ var data =
 
             // replace input field with a new identical one, with the value cleared
             // (html can't edit file field values)
-            var saveas = '';
-            var accept = '';
+            var saveas = "";
+            var accept = "";
             if (dialog.attr("nwsaveas") != undefined) {
                 saveas = 'nwsaveas="' + dialog.attr("nwsaveas") + '"';
             }
@@ -498,10 +497,10 @@ var data =
         else
         {
             switch(type) {
-                case 'json':
+                case "json":
                     content = "data:text/json," + content;
                     break;
-                case 'xml':
+                case "xml":
                     content = "data:text/xml," + content;
                     break;
                 default:
@@ -515,7 +514,7 @@ var data =
     tryOpenFile: function()
     {
         ipc.send("openFileDialog", "tryOpenFile");
-        // data.openFileDialog($('#open-file'), data.openFile);
+        // data.openFileDialog($("#open-file"), data.openFile);
     },
 
     tryAppend: function()
@@ -531,7 +530,7 @@ var data =
     trySave: function(type)
     {
         data.editingType(type);
-        // data.saveFileDialog($('#save-file'), type, data.getSaveData(type));
+        // data.saveFileDialog($("#save-file"), type, data.getSaveData(type));
         ipc.send("saveFileDialog", type, data.getSaveData(type));
     },
 
@@ -545,6 +544,6 @@ var data =
 
     sendToExternalApp: function()
     {
-        ipc.send('sendYarnDataToObject', JSON.parse(data.getSaveData(FILETYPE.JSON)));
+        ipc.send("sendYarnDataToObject", JSON.parse(data.getSaveData(FILETYPE.JSON)));
     },
 }

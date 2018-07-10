@@ -1,17 +1,15 @@
 'use strict';
 
-const electron = require('electron');
+const electron = require("electron");
 const remote = electron.remote;
-const Marquee = require('./js/marquee');
-const Draw = require('./js/draw');
+const Marquee = require("./js/marquee");
+const Draw = require("./js/draw");
 
 var App = function(name, version)
 {
-    // console.log(remote.getCurrentWindow()); ///// replace nw.gui 
-    var self = this;
-    
     // self
-    this.instance = this;
+    var self = this;
+    // this.instance = this;
     this.name = ko.observable(name);
     this.version = ko.observable(version);
     this.editing = ko.observable(null);
@@ -48,7 +46,7 @@ var App = function(name, version)
     if (typeof(require) == "function")
     {
         this.gui = remote.getCurrentWindow();
-        this.fs = remote.require('fs');
+        this.fs = remote.require("fs");
         this.isElectron = true;
     }
 
@@ -68,7 +66,7 @@ var App = function(name, version)
         ko.applyBindings(self, $("#app")[0]);
 
         self.canvas = $(".arrows")[0];
-        self.context = self.canvas.getContext('2d');
+        self.context = self.canvas.getContext("2d");
         self.newNode().title("Start");
 
         // search field
@@ -155,9 +153,9 @@ var App = function(name, version)
                         //prevents jumping straight back to standard dragging
                         if (!marquee.isActive())
                         {
-                            document.body.classList.add('mouseMoveView');
                             // self.transformOrigin[0] += e.pageX - offset.x;
                             // self.transformOrigin[1] += e.pageY - offset.y;
+                            document.body.classList.add("mouseMoveView");
 
                             // self.translate();
 
@@ -266,7 +264,7 @@ var App = function(name, version)
                 if (marquee.isActive() && marquee.selection.length == 0) {
                     self.deselectAllNodes();
                 }
-                document.body.classList.remove('mouseMoveView');
+                document.body.classList.remove("mouseMoveView");
 
                 marquee.disable();
 
@@ -280,14 +278,14 @@ var App = function(name, version)
         })();
 
         // search field
-        self.$searchField.on('input', self.updateSearch);
+        self.$searchField.on("input", self.updateSearch);
         $(".search-title input").click(self.updateSearch);
         $(".search-body input").click(self.updateSearch);
         $(".search-tags input").click(self.updateSearch);
         
         // Shortcut to focus search field
-        $(document).on('keydown', function(e) {
-            if (self.editing() || self.$searchField.is(':focus')) {
+        $(document).on("keydown", function(e) {
+            if (self.editing() || self.$searchField.is(":focus")) {
                 return;
             }
             if (e.ctrlKey || e.metaKey) {
@@ -299,7 +297,7 @@ var App = function(name, version)
 
         // Zoom In & Out
         // using the event helper
-        $('.nodes').mousewheel(function(event) {
+        $(".nodes").mousewheel(function(event) {
             // https://github.com/InfiniteAmmoInc/Yarn/issues/40
             if (event.altKey) {
                 return;
@@ -331,14 +329,14 @@ var App = function(name, version)
             self.translate();
         });
 
-        $(document).on('keyup keydown', function(e) {
+        $(document).on("keyup keydown", function(e) {
             self.shifted = e.shiftKey; 
         });
 
         // right click
         $(document).contextmenu( function(e) {
             // right click on the 'nodes' element (holding all the nodes)
-            let isAllowedEl = $(e.target).hasClass('nodes');
+            let isAllowedEl = $(e.target).hasClass("nodes");
             if (isAllowedEl)
             {
                 // create new node
@@ -357,8 +355,8 @@ var App = function(name, version)
             return !isAllowedEl;
         }); 
 
-        $(document).on('keydown', function(e) {
-            if (self.editing() || self.$searchField.is(':focus')) {
+        $(document).on("keydown", function(e) {
+            if (self.editing() || self.$searchField.is(":focus")) {
                 return;
             }
             //global ctrl+z
@@ -382,7 +380,7 @@ var App = function(name, version)
         });
         
         // Shortcuts for Saving/Opening files
-        $(document).on('keydown', function(e) {
+        $(document).on("keydown", function(e) {
             if (self.isElectron === false) {
                 return;
             }
@@ -888,7 +886,7 @@ var App = function(name, version)
 
     this.trim = function(x)
     {
-        return x.replace(/^\s+|\s+$/gm,'');
+        return x.replace(/^\s+|\s+$/gm, "");
     }
 
     this.appendText = function(textToAppend) 
@@ -901,7 +899,7 @@ var App = function(name, version)
 
     this.testRunFrom = function(startTestNode){
         ipc.send(
-            'testYarnStoryFrom',
+            "testYarnStoryFrom",
             JSON.parse(data.getSaveData(FILETYPE.JSON)),
             startTestNode
         );
@@ -966,9 +964,9 @@ var App = function(name, version)
     this.updateSearch = function()
     {
         var search = self.$searchField.val().toLowerCase();
-        var title = $(".search-title input").is(':checked');
-        var body = $(".search-body input").is(':checked');
-        var tags = $(".search-tags input").is(':checked');
+        var title = $(".search-title input").is(":checked");
+        var body = $(".search-body input").is(":checked");
+        var tags = $(".search-tags input").is(":checked");
         
         var on = 1;
         var off = 0.25;
@@ -1191,7 +1189,7 @@ var App = function(name, version)
                 if (self.gui != undefined)
                 {
                     var clipboard = self.gui.Clipboard.get();
-                    clipboard.set(text.substr(startOffset, (endOffset - startOffset)), 'text');
+                    clipboard.set(text.substr(startOffset, (endOffset - startOffset)), "text");
                 }
             }
             else
@@ -1201,8 +1199,8 @@ var App = function(name, version)
                 {
                     var clipboard = self.gui.Clipboard.get();
                     console.log(clipboard);
-                    text = text.substr(0, startOffset) + clipboard.get('text') + text.substr(endOffset);
-                    startOffset = endOffset = (startOffset + clipboard.get('text').length);
+                    text = text.substr(0, startOffset) + clipboard.get("text") + text.substr(endOffset);
+                    startOffset = endOffset = (startOffset + clipboard.get("text").length);
                 }
                 // ctrl + x
                 else if ((e.metaKey || e.ctrlKey) && e.keyCode == 88)
@@ -1210,7 +1208,7 @@ var App = function(name, version)
                     if (self.gui != undefined)
                     {
                         var clipboard = self.gui.Clipboard.get();
-                        clipboard.set(text.substr(startOffset, (endOffset - startOffset)), 'text');
+                        clipboard.set(text.substr(startOffset, (endOffset - startOffset)), "text");
                         text = text.substr(0, startOffset) + text.substr(endOffset);
                         endOffset = startOffset;
                     }
@@ -1369,7 +1367,7 @@ var App = function(name, version)
         var referenceNode = selectedNodes.shift();
 
         if (!selectedNodes.length) {
-            alert('Select nodes to align');
+            alert("Select nodes to align");
             return;
         }
 
@@ -1397,7 +1395,7 @@ var App = function(name, version)
         var referenceNode = selectedNodes.shift();
 
         if (!selectedNodes.length) {
-            alert('Select nodes to align');
+            alert("Select nodes to align");
             return;
         }
 
@@ -1522,7 +1520,7 @@ var App = function(name, version)
 
     this.updateEditorStats = function()
     {
-        var editor = ace.edit('editor');
+        var editor = ace.edit("editor");
         var text = editor.getSession().getValue();
         var cursor = editor.getCursorPosition();
 

@@ -32,7 +32,7 @@ var Node = function()
         if (this.tags().length > 0)
         {
             for (var i = 0; i < tags.length; i++) {
-                output += '<span>' + tags[i] + '</span>';
+                output += "<span>" + tags[i] + "</span>";
             }
         }
         return output;
@@ -292,7 +292,7 @@ var Node = function()
             // the click target is not a button (with the class icon)
             if (leftButtonHeld && !dragging && self.active() && !$(e.target).hasClass("icon"))
             {
-                document.body.classList.add('mouseGrabbing');
+                document.body.classList.add("mouseGrabbing");
 
                 var parent = $(self.element).parent();
 
@@ -321,7 +321,7 @@ var Node = function()
                 app.addNodeSelected(self);
             }
 
-            document.body.classList.remove('mouseGrabbing');
+            document.body.classList.remove("mouseGrabbing");
             moved = false;
         });
 
@@ -335,7 +335,7 @@ var Node = function()
                 leftButtonHeld = false;
             }
 
-            document.body.classList.remove('mouseGrabbing');
+            document.body.classList.remove("mouseGrabbing");
             app.updateArrowsThrottled();
         });
     }
@@ -416,7 +416,7 @@ var Node = function()
     }
 
     this.getScale = function() {
-        if (app && typeof app.cachedScale === 'number') {
+        if (app && typeof app.cachedScale === "number") {
             return app.cachedScale;
         } else {
             return 1;
