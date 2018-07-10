@@ -5,7 +5,9 @@
     "main": "main.js",
     "description": "Dialogue editor for VineScript. Fork of Yarn (https://github.com/InfiniteAmmoInc/Yarn).",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "build": "build --dir",
+        "release": "build"
     },
     "repository": {
         "type": "git",
@@ -18,7 +20,8 @@
     },
     "homepage": "https://github.com/julsam/VineEditor#readme",
     "devDependencies": {
-        "electron": "^2.0.2"
+        "electron": "^2.0.2",
+        "electron-builder": "^20.15.1"
     },
     "dependencies": {
         "bbcode": "^0.1.5",
