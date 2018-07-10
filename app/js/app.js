@@ -4,6 +4,7 @@ const electron = require("electron");
 const remote = electron.remote;
 const Marquee = require("./js/marquee");
 const Draw = require("./js/draw");
+const appSettings = remote.require("./main/vine-editor-settings");
 
 var App = function(name, version)
 {
@@ -1023,6 +1024,11 @@ var App = function(name, version)
         var scale = self.cachedScale;
         var offset = $(".nodes-holder").offset();
 
+        // Type of connection [straight, quadratic, bezier]
+        let connectionId = appSettings.get("prefs.nodeConnectionTypeId");
+        let connectionTypeList = appSettings.get("data.nodeConnectionTypeList");
+        let connectionType = connectionTypeList[connectionId].toLowerCase();
+
         self.context.clearRect(0, 0, $(window).width(), $(window).height());
         self.context.lineWidth = 4 * scale;
 
@@ -1067,20 +1073,20 @@ var App = function(name, version)
                     var from = { x: fromX + normal.x * dist * scale, y: fromY + normal.y * dist * scale };
                     var to = { x: toX - normal.x * dist * scale, y: toY - normal.y * dist * scale };
 
-                    // draw straight line
-                    // Draw.drawStraightLine(self.context, from, to, scale, normal,
-                    //     "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
-                    // );
-                    
-                    // // draw quadratic line
-                    Draw.drawQuadraticLine(self.context, from, to, scale,
-                        "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
-                    );
-                    
-                    // draw bezier line
-                    // Draw.drawBezierLine(self.context, from, to, scale,
-                    //     "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
-                    // );
+                    if (connectionType === "quadratic") {
+                        Draw.drawQuadraticLine(self.context, from, to, scale,
+                            "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
+                        );
+                    } else if (connectionType === "bezier") {
+                        Draw.drawBezierLine(self.context, from, to, scale,
+                            "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
+                        );
+                    } else {
+                        // straight line
+                        Draw.drawStraightLine(self.context, from, to, scale, normal,
+                            "rgba(0, 0, 0, " + (node.tempOpacity * 0.6) + ")"
+                        );
+                    }
                 }
             }
         }

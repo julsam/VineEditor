@@ -8,7 +8,8 @@ const isDev = require("electron-is").dev();
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let yarnRunnerWindow;
-let versionNumber = require('./package.json').version;
+let versionNumber = require("./package.json").version;
+const appSettings = require("./main/vine-editor-settings");
 
 const fileFilters = [
     { name: "Any Accepted Formats", extensions: [
@@ -24,18 +25,28 @@ const fileFilters = [
 ];
 
 function createWindow() {
+    // Load settings
+    appSettings.loadSettings();
+
     // Create the browser window.
-    mainWindow =  new BrowserWindow({
-        width: 1200,
-        height: 800,
-        minWidth: 800,
-        minHeight: 600,
+    mainWindow = new BrowserWindow({
+        width: appSettings.get("config.width", 1280),
+        height: appSettings.get("config.height", 800),
+        minWidth: appSettings.get("data.minWidth", 800),
+        minHeight: appSettings.get("data.minHeight", 600),
         show: false,
-        //frame: false,
-        //icon: "Yarn.png"
+        center: false
+        // frame: false
+        //icon: "Yarn.png",
+        //autoHideMenuBar:true
     });
     // Hide the menu
     //mainWindow.setMenu(null);
+
+    // // Build app menu from menuTemplate
+    // const menu = Menu.buildFromTemplate(menuTemplate);
+    // // Set menu to menuTemplate - "activate" the menu
+    // Menu.setApplicationMenu(menu);
 
     mainWindow.loadFile("app/index.html");
     
@@ -44,8 +55,27 @@ function createWindow() {
     // not been shown yet. Showing the window after this event will have no visual
     // flash
     mainWindow.once("ready-to-show", () => {
-        mainWindow.show();
-        if (isDev) {
+        if (    appSettings.get("config.x", -1) <= -1
+            &&  appSettings.get("config.y", -1) <= -1
+        ) {
+            mainWindow.center();
+        } else {
+            mainWindow.setPosition(
+                appSettings.get("config.x", 0),
+                appSettings.get("config.y", 0)
+            );
+            console.log(mainWindow.getPosition());
+        }
+        if (appSettings.get("config.maximized", false)) {
+            // Maximize and show the window
+            mainWindow.maximize();
+            // Focus the window (maximize doesn't do it automatically)
+            mainWindow.focus();
+        } else {
+            // Show and focus the window
+            mainWindow.show();
+        }
+        if (isDev && appSettings.get("prefs.openDevTools", false)) {
             mainWindow.webContents.openDevTools({mode: "bottom"});
         }
     });
@@ -55,12 +85,49 @@ function createWindow() {
         mainWindow.webContents.send("launchApp", versionNumber);
     });
 
-    mainWindow.on("close", function (event) {
-        event.preventDefault();
+    if (isDev) {
+        mainWindow.webContents.on("devtools-opened", () => {
+            appSettings.set("prefs.openDevTools", true);
+        });
+        mainWindow.webContents.on("devtools-closed", () => {
+            appSettings.set("prefs.openDevTools", false);
+        });
+    }
+
+    mainWindow.on("resize", () => {
+        console.log("resize");
+        if (!mainWindow.isMaximized()) {
+            appSettings.set("config.width", mainWindow.getSize()[0]);
+            appSettings.set("config.height", mainWindow.getSize()[1]);
+        }
+    });
+
+    mainWindow.on("move", () => {
+        console.log("move");
+        if (!mainWindow.isMaximized()) {
+            appSettings.set("config.x", mainWindow.getPosition()[0]);
+            appSettings.set("config.y", mainWindow.getPosition()[1]);
+        }
+    });
+
+    mainWindow.on("maximize", () => {
+        console.log("maximize");
+        appSettings.set("config.maximized", true);
+    });
+
+    mainWindow.on("unmaximize", () => {
+        appSettings.set("config.maximized", false);
+    });
+
+    mainWindow.on("close", (event) => {
+        // save settings
+        appSettings.flush();
+
         if (yarnRunnerWindow) {
             yarnRunnerWindow.destroy();
         }
-        mainWindow.destroy();
+
+        // Dereference the window object
         mainWindow = null;
     });
     
@@ -121,8 +188,8 @@ function createWindow() {
         // mainWindow.close();
     })
     
-    ipcMain.on("testYarnStoryFrom" ,(event, content, startTestNode) => {
-        createYarnTesterWindow(content,startTestNode);
+    ipcMain.on("testYarnStoryFrom", (event, content, startTestNode) => {
+        createYarnTesterWindow(content, startTestNode);
     });
 }
     
@@ -141,7 +208,7 @@ function createYarnTesterWindow(content, startTestNode) {
     yarnRunnerWindow.loadURL(`file://${__dirname}/app/renderer.html`);
     
     yarnRunnerWindow.webContents.on("dom-ready", () => {
-        yarnRunnerWindow.webContents.send("loadYarnDataOnRunner", content,startTestNode);
+        yarnRunnerWindow.webContents.send("loadYarnDataOnRunner", content, startTestNode);
         yarnRunnerWindow.show();
         // yarnRunnerWindow.maximize();
     });
