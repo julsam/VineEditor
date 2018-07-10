@@ -620,7 +620,7 @@ var App = function(name, version)
     this.quit = function()
     {
         if (self.isElectron) {
-            remote.app.quit();
+            self.gui.close();
         }
     }
 
