@@ -149,5 +149,11 @@ var Utils =
 
             return result;
         };
+    },
+
+    getSnapPosition: function(x, y, gridSize) {
+        newX = Math.round(x / gridSize) * gridSize;
+        newY = Math.round(y / gridSize) * gridSize;
+        return { x: newX, y: newY };
     }
 }

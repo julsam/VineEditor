@@ -244,6 +244,14 @@ var Node = function()
                 var parent = $(self.element).parent();
                 var newX = (e.pageX / self.getScale() - offset[0]);
                 var newY = (e.pageY / self.getScale() - offset[1]);
+                
+                if (appSettings.get("prefs.snapToGrid", false)) {
+                    // snap to grid 25x25
+                    let snappedPos = Utils.getSnapPosition(newX, newY, 25);
+                    newX = snappedPos.x;
+                    newY = snappedPos.y;
+                }
+
                 var movedX = newX - self.x();
                 var movedY = newY - self.y();
 
@@ -421,6 +429,12 @@ var Node = function()
         } else {
             return 1;
         }
+    }
+
+    this.snapToGrid = function(gridSize=25) {
+        let pos = Utils.getSnapPosition(self.x(), self.y(), gridSize);
+        self.x(pos.x);
+        self.y(pos.y);
     }
 }
 

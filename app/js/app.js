@@ -830,6 +830,9 @@ var App = function(name, version)
     {
         var node = new Node();
         self.nodes.push(node);
+        if (appSettings.get("prefs.snapToGrid", false)) {
+            node.snapToGrid(100);
+        }
         if (updateArrows == undefined || updateArrows == true) {
             self.updateNodeLinks();
         }
@@ -843,11 +846,16 @@ var App = function(name, version)
     this.newNodeAt = function(x, y)
     {
         var node = new Node();
-        
         self.nodes.push(node);
 
-        node.x(x-100);
-        node.y(y-100);
+        if (appSettings.get("prefs.snapToGrid", false)) {
+            let snappedPos = Utils.getSnapPosition(x - 100, y - 100, 25);
+            node.x(snappedPos.x);
+            node.y(snappedPos.y);
+        } else {
+            node.x(x);
+            node.y(y);
+        }
         self.updateNodeLinks();
         self.recordNodeAction("created", node);
         self.addNodeSelected(node);
