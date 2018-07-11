@@ -64,7 +64,6 @@ function createWindow() {
                 appSettings.get("config.x", 0),
                 appSettings.get("config.y", 0)
             );
-            console.log(mainWindow.getPosition());
         }
         if (appSettings.get("config.maximized", false)) {
             // Maximize and show the window
@@ -95,7 +94,6 @@ function createWindow() {
     }
 
     mainWindow.on("resize", () => {
-        console.log("resize");
         if (!mainWindow.isMaximized()) {
             appSettings.set("config.width", mainWindow.getSize()[0]);
             appSettings.set("config.height", mainWindow.getSize()[1]);
@@ -103,7 +101,6 @@ function createWindow() {
     });
 
     mainWindow.on("move", () => {
-        console.log("move");
         if (!mainWindow.isMaximized()) {
             appSettings.set("config.x", mainWindow.getPosition()[0]);
             appSettings.set("config.y", mainWindow.getPosition()[1]);
@@ -111,7 +108,6 @@ function createWindow() {
     });
 
     mainWindow.on("maximize", () => {
-        console.log("maximize");
         appSettings.set("config.maximized", true);
     });
 
@@ -132,7 +128,6 @@ function createWindow() {
     });
     
     ipcMain.on("openFileDialog", (event, operation) => {
-        console.log("Open file");
         dialog.showOpenDialog({
             properties: ["openFile"],
             // defaultPath: "",
@@ -145,7 +140,6 @@ function createWindow() {
     });
     
     ipcMain.on("appendFileDialog", (event, operation) => {
-        console.log("Append file");
         dialog.showOpenDialog({
             properties: ["openFile", "multiSelections"],
             // defaultPath: "",
@@ -160,7 +154,6 @@ function createWindow() {
     });
     
     ipcMain.on("openDirectoryDialog", (event, operation) => {
-        console.log("Open Directory");
         dialog.showOpenDialog({
             properties: ["openDirectory", "multiSelections"],
             filters: fileFilters // useless for directories?
