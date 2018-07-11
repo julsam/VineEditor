@@ -22,6 +22,28 @@ Node connections work similar to Twine.
 
 ![Screenshot](http://infiniteammo.com/Yarn/node-connections.jpg)
 
+# Build from source
+
+With node.js / npm already installed, first install the dependencies:
+```
+npm install
+```
+
+Then either run the app from source, without building an executable:
+```
+npm start
+```
+
+Or build the app unpacked, it produces an executable for your current platform:
+```
+npm run build
+```
+
+Alternatively you can build the app and an installer for it:
+```
+npm run dist
+```
+
 # TODO
  * more explanations
  * update the screenshots

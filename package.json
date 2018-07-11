@@ -4,21 +4,83 @@
     "version": "0.0.1",
     "main": "main.js",
     "description": "Dialogue editor for VineScript. Fork of Yarn (https://github.com/InfiniteAmmoInc/Yarn).",
-    "scripts": {
-        "start": "electron .",
-        "build": "build --dir",
-        "release": "build"
-    },
+    "author": "julsam",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/julsam/VineEditor.git"
     },
-    "author": "@julsam",
-    "license": "MIT",
     "bugs": {
         "url": "https://github.com/julsam/VineEditor/issues"
     },
     "homepage": "https://github.com/julsam/VineEditor#readme",
+    "build": {
+        "appId": "net.vinescript.editor",
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": false
+        },
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "dir",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "zip",
+                    "arch": ["x64"]
+                }
+            ]
+        },
+        "linux": {
+            "target": [
+                {
+                    "target": "dir",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "tar.gz",
+                    "arch": ["x64"]
+                }
+            ]
+        },
+        "mac": {
+            "category": "public.app-category.developer-tools",
+            "target": [
+                {
+                    "target": "dmg",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "dir",
+                    "arch": ["x64"]
+                },
+                {
+                    "target": "zip",
+                    "arch": ["x64"]
+                }
+            ]
+        },
+        "directories": {
+            "output": "dist"
+        }
+    },
+    "scripts": {
+        "start": "electron .",
+        "build": "build --dir",
+        "build:win": "build --win",
+        "build:linux": "build --linux",
+        "build:mac": "build --mac",
+        "build:all-platform": "build -mwl",
+        "build:all-arch": "build --x64 --ia32",
+        "build:all": "build -mwl --x64 --ia32",
+        "dist": "build"
+    },
     "devDependencies": {
         "electron": "^2.0.2",
         "electron-builder": "^20.15.1"

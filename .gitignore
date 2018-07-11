@@ -28,6 +28,9 @@ coverage
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
+# electron-builder output dir
+dist
+
 # Dependency directory
 node_modules
 
