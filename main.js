@@ -36,7 +36,12 @@ function createWindow() {
         minWidth: appSettings.get("data.minWidth", 800),
         minHeight: appSettings.get("data.minHeight", 600),
         show: false,
-        center: false
+        center: false,
+        // backgroundColor is used when the app is not completely loaded.
+        // It's visible when the app is slow to load, or the time of a frame
+        // when resizing. The color should correspond to the one defined for
+        // the body of the #app-bg
+        backgroundColor: "#a7dee4"
         // frame: false
         //icon: "Yarn.png",
         //autoHideMenuBar:true
