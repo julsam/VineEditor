@@ -1,16 +1,17 @@
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
 const url = require("url");
 const path = require("path");
 const isDev = require("electron-is").dev();
+const versionNumber = require("./package.json").version;
+const appSettings = require("./main/vine-editor-settings");
+const menuTemplate = require("./main/vine-editor-menu");
 const ScreenHelpers = require("./main/screen-helpers");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let yarnRunnerWindow;
-let versionNumber = require("./package.json").version;
-const appSettings = require("./main/vine-editor-settings");
 
 const fileFilters = [
     { name: "Any Accepted Formats", extensions: [
@@ -49,10 +50,10 @@ function createWindow() {
     // Hide the menu
     //mainWindow.setMenu(null);
 
-    // // Build app menu from menuTemplate
-    // const menu = Menu.buildFromTemplate(menuTemplate);
-    // // Set menu to menuTemplate - "activate" the menu
-    // Menu.setApplicationMenu(menu);
+    // Build app menu from menuTemplate
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    // Set menu to menuTemplate - "activate" the menu
+    Menu.setApplicationMenu(menu);
 
     mainWindow.loadFile("app/index.html");
     
