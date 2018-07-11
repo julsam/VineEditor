@@ -3,6 +3,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const url = require("url");
 const path = require("path");
 const isDev = require("electron-is").dev();
+const ScreenHelpers = require("./main/screen-helpers");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -55,16 +56,35 @@ function createWindow() {
     // not been shown yet. Showing the window after this event will have no visual
     // flash
     mainWindow.once("ready-to-show", () => {
+        // Center the window
         if (    appSettings.get("config.x", -1) <= -1
             &&  appSettings.get("config.y", -1) <= -1
         ) {
             mainWindow.center();
-        } else {
+        }
+        else
+        {
+            // Checks that the window will be visible. Maybe the window
+            // was on a second monitor the last time it was used,
+            // but it got disconnected since then, so we have to make sure
+            // the position fits the current monitor setup.
+            const isOnScreen = ScreenHelpers.isPointOnScreen({
+                x: appSettings.get("config.x"),
+                y: appSettings.get("config.y")
+            });
+            if (!isOnScreen) {
+                // sets new position to (0, 0)
+                appSettings.set("config.x", 0);
+                appSettings.set("config.y", 0);
+            }
+            // sets the position saved in the settings
             mainWindow.setPosition(
-                appSettings.get("config.x", 0),
-                appSettings.get("config.y", 0)
+                appSettings.get("config.x"),
+                appSettings.get("config.y")
             );
         }
+
+        // Maximize
         if (appSettings.get("config.maximized", false)) {
             // Maximize and show the window
             mainWindow.maximize();
@@ -74,6 +94,7 @@ function createWindow() {
             // Show and focus the window
             mainWindow.show();
         }
+
         if (isDev && appSettings.get("prefs.openDevTools", false)) {
             mainWindow.webContents.openDevTools({mode: "bottom"});
         }
@@ -185,7 +206,7 @@ function createWindow() {
         createYarnTesterWindow(content, startTestNode);
     });
 }
-    
+
 function createYarnTesterWindow(content, startTestNode) {
     // console.log("START RUN::"+startTestNode);
     if (yarnRunnerWindow) {
