@@ -91,14 +91,12 @@ function createWindow() {
 
         // Maximize
         if (appSettings.get("config.maximized", false)) {
-            // Maximize and show the window
+            // Maximize and show the window (it doesn't show on MacOS...)
             mainWindow.maximize();
-            // Focus the window (maximize doesn't do it automatically)
-            mainWindow.focus();
-        } else {
-            // Show and focus the window
-            mainWindow.show();
         }
+
+        // Show and focus the window
+        mainWindow.show();
 
         if (isDev && appSettings.get("prefs.openDevTools", false)) {
             mainWindow.webContents.openDevTools({mode: "bottom"});
