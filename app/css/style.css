@@ -274,6 +274,9 @@ a:hover {
     margin-left: 10px;
     margin-right: 4px;
 }
+.app-search input:focus {
+    outline: 5px auto #6eaef7;
+}
 .app-search .search-field {
     margin-left: 0px;
     margin-right: 0px;
