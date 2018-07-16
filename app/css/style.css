@@ -343,9 +343,11 @@ a:hover {
     background: #fff url("../images/sort.png") no-repeat;
     float: left;
     display: inline;
-    opacity: 0.25;
     cursor: pointer;
-    transition: opacity 0.25s;
+
+    opacity: 0.25;
+    transform-origin: 50% 50%;
+    transition: opacity .3s ease;
 }
 
 .app-sort span:not(:last-child) {
