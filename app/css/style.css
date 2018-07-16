@@ -399,7 +399,6 @@ a:hover {
     border: 1px solid #6eaef7;
     box-shadow: 0 0px 8px 0 rgba(11, 137, 245, 0.37);
 }
-
 .node.selected {
     border: 1px solid #6eaef7;
     box-shadow: 0 0px 8px 0 rgba(11, 137, 245, 0.37);
@@ -534,7 +533,7 @@ a:hover {
     height: 90%;
     padding: 20px 20px 30px 20px;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 2px;
     box-shadow: 0px 1px 1px #000;
 }
 
