@@ -154,25 +154,26 @@ var App = function(name, version)
                         //prevents jumping straight back to standard dragging
                         if (!marquee.isActive())
                         {
-                            // self.transformOrigin[0] += e.pageX - offset.x;
-                            // self.transformOrigin[1] += e.pageY - offset.y;
                             document.body.classList.add("mouseMoveView");
 
-                            // self.translate();
+                            self.transformOrigin[0] += e.pageX - offset.x;
+                            self.transformOrigin[1] += e.pageY - offset.y;
 
+                            self.translate();
+
+                            offset.x = e.pageX;
+                            offset.y = e.pageY;
+
+                            // const nodes = self.nodes();
+                            // for (let i in nodes)
+                            // {
+                            //     nodes[i].x(nodes[i].x() + (e.pageX - offset.x) / self.cachedScale);
+                            //     nodes[i].y(nodes[i].y() + (e.pageY - offset.y) / self.cachedScale);
+                            // }
                             // offset.x = e.pageX;
                             // offset.y = e.pageY;
 
-                            var nodes = self.nodes();
-                            for (var i in nodes)
-                            {
-                                nodes[i].x(nodes[i].x() + (e.pageX - offset.x) / self.cachedScale);
-                                nodes[i].y(nodes[i].y() + (e.pageY - offset.y) / self.cachedScale);
-                            }
-                            offset.x = e.pageX;
-                            offset.y = e.pageY;
-                            
-                            self.updateArrowsThrottled();
+                            // self.updateArrowsThrottled();
                         }
                     }
                     else if (leftButtonHeld)
@@ -312,6 +313,30 @@ var App = function(name, version)
             self.cachedScale = Utils.clamp(
                 self.cachedScale + scaleChange, self.zoomLimitMin, self.zoomLimitMax
             );
+           
+            // Remove css class starting with "zoomLevel"
+            $("body").removeClass(function(index, css) {
+                return (css.match(/(^|\s)zoomLevel\S+/g) || []).join(" ");
+            });
+
+            // Sets the appropriate zoom level class that changes some elements
+            // to make them more or less visibles depending on the zoom level
+            if (self.cachedScale < 0.15) {
+                $("body").addClass("zoomLevel-5");
+            } else if (self.cachedScale < 0.25) {
+                $("body").addClass("zoomLevel-4");
+            } else if (self.cachedScale < 0.5) {
+                $("body").addClass("zoomLevel-3");
+            } else if (self.cachedScale < 0.8) {
+                $("body").addClass("zoomLevel-2");
+            } else {
+                $("body").addClass("zoomLevel-1");
+            }
+
+            // Scaled background-size: 100px * scale
+            const scaledBgSize = Math.round(100 * self.cachedScale);
+            const bgsizeStr = scaledBgSize + "px " + scaledBgSize + "px";
+            document.getElementById("app-bg").style.backgroundSize = bgsizeStr;
 
             var mouseX = event.pageX - self.transformOrigin[0];
             var mouseY = event.pageY - self.transformOrigin[1];
@@ -1356,6 +1381,15 @@ var App = function(name, version)
                 clearInterval(updateArrowsInterval);
                 self.updateArrowsThrottled();
             }
+        );
+        
+        $("#app-bg").transition(
+            {
+                "background-position-x": Math.round(self.transformOrigin[0]),
+                "background-position-y": Math.round(self.transformOrigin[1])
+            },
+            speed,
+            "easeInQuad"
         );
     }
 
