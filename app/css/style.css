@@ -15,7 +15,10 @@ body {
     /* background-image: -webkit-linear-gradient(45deg, #ddc9b9 0%, #daf0f2 100%); */
     /* background-image: -webkit-linear-gradient(45deg, #e8dbc5 0%, #a7dee4 100%); */
     /* background-image: -webkit-linear-gradient(45deg, #b5cbe0 0%, #a7dee4 100%); */
-    background: -webkit-linear-gradient(45deg, #caccf1 0%, #a7dee4 90%);
+    /* background: -webkit-linear-gradient(45deg,  #e8dbc5 5%, #caccf1 5%, #a7dee4 70%, #a7dee4 95%, #e8dbc5 95%); */
+    /* background: -webkit-linear-gradient(45deg, #def1de 30%, #a7dee4 70%); */
+    /* background: -webkit-linear-gradient(45deg, #def1de 0%, #a7dee4 100%); */
+    background: -webkit-linear-gradient(45deg, #caccf1 0%, #a7dee4 70%);
 }
 
 /* Move the view around */
