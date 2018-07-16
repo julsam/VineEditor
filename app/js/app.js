@@ -309,13 +309,9 @@ var App = function(name, version)
             var lastZoom = self.cachedScale;
             var scaleChange = event.deltaY * self.zoomSpeed * self.cachedScale;
 
-            if (self.cachedScale + scaleChange > self.zoomLimitMax) {
-                self.cachedScale = self.zoomLimitMax;
-            } else if (self.cachedScale + scaleChange < self.zoomLimitMin) {
-                self.cachedScale = self.zoomLimitMin;
-            } else {
-                self.cachedScale += scaleChange;
-            };
+            self.cachedScale = Utils.clamp(
+                self.cachedScale + scaleChange, self.zoomLimitMin, self.zoomLimitMax
+            );
 
             var mouseX = event.pageX - self.transformOrigin[0];
             var mouseY = event.pageY - self.transformOrigin[1];
