@@ -340,13 +340,16 @@ a:hover {
 .app-sort span {
     width: 32px;
     height: 32px;
-    margin: 8px;
     background: #fff url("../images/sort.png") no-repeat;
     float: left;
     display: inline;
     opacity: 0.25;
     cursor: pointer;
     transition: opacity 0.25s;
+}
+
+.app-sort span:not(:last-child) {
+    margin-right: 8px;
 }
 
 .app-sort span:nth-child(2) { background-position: -32px 0px; }
