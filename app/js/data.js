@@ -92,7 +92,7 @@ var data =
 
     openFolder: function(e, foldername)
     {
-        editingFolder = foldername;
+        data.editingFolder(foldername);
         alert("openFolder not yet implemented e: " + e + " foldername: " + foldername);
     },
 
