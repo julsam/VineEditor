@@ -47,7 +47,7 @@ var App = function(name, version)
     if (typeof(require) == "function")
     {
         this.gui = remote.getCurrentWindow();
-        this.fs = remote.require("fs");
+        this.fs = remote.require("graceful-fs");
         this.isElectron = true;
     }
 
