@@ -1,8 +1,56 @@
 'use strict'
 
-const {app} = require("electron");
+const electron = require("electron");
+const {app, shell, ipcMain, BrowserWindow} = electron;
 
 const menuTemplate = [
+    {
+        label: "File",
+        submenu: [
+            {
+                label: "New File",
+                id: "NewFile",
+                accelerator: "CmdOrCtrl+N",
+                click: () => {
+                    const mainWin = BrowserWindow.fromId(global.mainWindowId);
+                    mainWin.webContents.send("try-new-file");
+                }
+            },
+            {
+                label: "Open File",
+                id: "OpenFile",
+                accelerator: "CmdOrCtrl+O",
+                click: () => { ipcMain.emit("open-file-dialog", null, "tryOpenFile"); }
+            },
+            {
+                label: "Append",
+                id: "Append",
+                accelerator: "CmdOrCtrl+Shift+A",
+                click: () => {
+                    const mainWin = BrowserWindow.fromId(global.mainWindowId);
+                    mainWin.webContents.send("try-append");
+                }
+            },
+            {
+                label: "Save",
+                id: "SaveCurrent",
+                accelerator: "CmdOrCtrl+S",
+                click: () => {
+                    const mainWin = BrowserWindow.fromId(global.mainWindowId);
+                    mainWin.webContents.send("try-save-current");
+                }
+            },
+            {
+                label: "Save As...",
+                id: "SaveAs",
+                accelerator: "CmdOrCtrl+Shift+S",
+                click: () => {
+                    const mainWin = BrowserWindow.fromId(global.mainWindowId);
+                    mainWin.webContents.send("try-save");
+                }
+            }
+        ]
+    },
     {
         label: "Edit",
         submenu: [
@@ -43,7 +91,7 @@ const menuTemplate = [
             {
                 label: "Learn More",
                 click: () => {
-                    require("electron").shell.openExternal("https://github.com/julsam/VineEditor");
+                    shell.openExternal("https://github.com/julsam/VineEditor");
                 }
             }
         ]
@@ -52,11 +100,17 @@ const menuTemplate = [
 
 if (process.platform !== "darwin")
 {
-    menuTemplate.unshift({
-        label: "File",
-        submenu: [
-            {role: "quit"}
-        ]
+    // File menu
+    menuTemplate[0].submenu.push(
+        {role: "quit", label: "Quit", accelerator: 'CmdOrCtrl+Q'}
+    );
+
+    // Help menu
+    menuTemplate[4].submenu.push({
+        label: "About",
+        click: () => {
+            console.log("Not implemented yet");
+        }
     });
 }
 
@@ -78,7 +132,7 @@ if (process.platform === "darwin")
     });
   
     // Edit menu
-    menuTemplate[1].submenu.push(
+    menuTemplate[2].submenu.push(
         {type: "separator"},
         {
             label: "Speech",
@@ -90,7 +144,7 @@ if (process.platform === "darwin")
     );
   
     // Window menu
-    menuTemplate[3].submenu = [
+    menuTemplate[4].submenu = [
         {role: "close"},
         {role: "minimize"},
         {role: "zoom"},

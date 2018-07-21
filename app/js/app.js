@@ -408,63 +408,6 @@ var App = function(name, version)
             }
         });
         
-        // Shortcuts for Saving/Opening files
-        $(document).on("keydown", function(e) {
-            if (self.isElectron === false) {
-                return;
-            }
-            
-            if (e.ctrlKey || e.metaKey)
-            {
-                if (e.shiftKey)
-                {
-                    switch(e.keyCode)
-                    {
-                        case 83: // Ctrl + Shift + S
-                            data.trySave(FILETYPE.JSON);
-                            self.fileKeyPressed = true;
-                        break;
-                        case 65: // Ctrl + Shift + A
-                            // TODO doesn't seem to work
-                            data.tryAppend();
-                            self.fileKeyPressed = true;
-                        break;
-                    }
-                }
-                else if (e.altKey)
-                {
-                    switch(e.keyCode)
-                    {
-                        case 83: // Ctrl + Alt + S
-                            data.trySave(FILETYPE.YARNTEXT);
-                            self.fileKeyPressed = true;
-                        break;
-                    }  
-                }
-                else
-                {
-                    switch(e.keyCode)
-                    {
-                        case 83: // Ctrl + S
-                            if (data.editingPath() != null) {
-                                data.trySaveCurrent();
-                            } else {
-                                data.trySave(FILETYPE.JSON);
-                            }
-                            self.fileKeyPressed = true;
-                        break;
-                        case 79: // Ctrl + O
-                            // shouldn't be allowed to open new project while editing code
-                            if (self.editing() == null) {
-                                data.tryOpenFile();
-                                self.fileKeyPressed = true;
-                            }
-                        break;
-                    }
-                }
-            }
-        });
-        
         $(document).on("keydown", function(e) {
             if (self.editing() || self.$searchField.is(":focus") || e.ctrlKey || e.metaKey) {
                 return;
@@ -911,6 +854,8 @@ var App = function(name, version)
     {
         if (node.active())
         {
+            ipc.send("modeChanged", "textEditorMode");
+
             self.editing(node);
 
             $(".node-editor").css({ opacity: 0 }).transition({ opacity: 1 }, 250);
@@ -995,6 +940,7 @@ var App = function(name, version)
             $(".node-editor .form").transition({ y: "-100" }, 250, function()
             {
                 self.editing(null);
+                ipc.send("modeChanged", "nodeMode");
             });
 
             setTimeout(self.updateSearch, 100);

@@ -13,6 +13,8 @@ const ScreenHelpers = require("./main/screen-helpers");
 let mainWindow;
 let yarnRunnerWindow;
 
+global.mainWindowId = 0;
+
 const fileFilters = [
     { name: "Any Accepted Formats", extensions: [
         "json", "vine", "yarn.txt", "xml", "tw2", "txt"
@@ -47,13 +49,17 @@ function createWindow() {
         //icon: "Yarn.png",
         //autoHideMenuBar:true
     });
+
+    // global reference to the main window id
+    global.mainWindowId = mainWindow.id;
+
     // Hide the menu
     //mainWindow.setMenu(null);
 
     // Build app menu from menuTemplate
-    const menu = Menu.buildFromTemplate(menuTemplate);
+    const mainMenu = Menu.buildFromTemplate(menuTemplate);
     // Set menu to menuTemplate - "activate" the menu
-    Menu.setApplicationMenu(menu);
+    Menu.setApplicationMenu(mainMenu);
 
     mainWindow.loadFile("app/index.html");
     
@@ -152,51 +158,75 @@ function createWindow() {
         mainWindow = null;
     });
     
-    ipcMain.on("openFileDialog", (event, operation) => {
-        dialog.showOpenDialog({
+
+    ipcMain.on("modeChanged", (event, mode) => {
+        if (mode === "textEditorMode") {
+            mainMenu.getMenuItemById("NewFile").enabled = false;
+            mainMenu.getMenuItemById("OpenFile").enabled = false;
+            mainMenu.getMenuItemById("Append").enabled = false;
+        } else { // nodeMode
+            mainMenu.getMenuItemById("NewFile").enabled = true;
+            mainMenu.getMenuItemById("OpenFile").enabled = true;
+            mainMenu.getMenuItemById("Append").enabled = true;
+        }
+    });
+    
+    ipcMain.on("new-file-dialog", (event, hasUnsavedChanges) => {
+        if (hasUnsavedChanges) {
+
+        } else {
+            mainWindow.webContents.send("new-file");
+        }
+    });
+    
+    ipcMain.on("open-file-dialog", (event, operation) => {
+        dialog.showOpenDialog(mainWindow, {
+            title: "Open File",
             properties: ["openFile"],
             // defaultPath: "",
             filters: fileFilters
         }, function (files) {
             if (files !== undefined) {
-                mainWindow.webContents.send("loadFileFromDisk", files[0], operation);
+                mainWindow.webContents.send("open-file", files[0], operation);
             }
         });
     });
     
-    ipcMain.on("appendFileDialog", (event, operation) => {
-        dialog.showOpenDialog({
+    ipcMain.on("append-file-dialog", (event, operation) => {
+        dialog.showOpenDialog(mainWindow, {
+            title: "Append Files",
             properties: ["openFile", "multiSelections"],
             // defaultPath: "",
             filters: fileFilters
         }, function (files) {
             if (files !== undefined) {
                 for (var i = 0; i < files.length; i++) {
-                    mainWindow.webContents.send("loadFileFromDisk", files[i], operation);
+                    mainWindow.webContents.send("open-file", files[i], operation);
                 }
             }
         });
     });
     
-    ipcMain.on("openDirectoryDialog", (event, operation) => {
-        dialog.showOpenDialog({
+    ipcMain.on("open-directory-dialog", (event, operation) => {
+        dialog.showOpenDialog(mainWindow, {
+            title: "Open Directory",
             properties: ["openDirectory", "multiSelections"],
             filters: fileFilters // useless for directories?
         }, function (dirs) {
             if (dirs !== undefined) {
                 for (var i = 0; i < dirs.length; i++) {
-                    mainWindow.webContents.send("loadFileFromDisk", dirs[i], operation);
+                    mainWindow.webContents.send("open-file", dirs[i], operation);
                 }
             }
         });
     });
     
-    ipcMain.on("saveFileDialog", (event, type, content) => {
+    ipcMain.on("save-file-dialog", (event, type, content) => {
         dialog.showSaveDialog(mainWindow, {
             filters: [{ name: "story", extensions: [type] }] 
         }, function(filepath) {
             if (filepath !== undefined) {
-                mainWindow.webContents.send("saveFileToDisk", filepath, type, content);
+                mainWindow.webContents.send("save-file", filepath, type, content);
             }
         });
     });

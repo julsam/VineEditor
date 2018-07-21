@@ -186,7 +186,7 @@ var Node = function()
     }
 
     this.cycleColorUp = function()
-    {	
+    {
         self.doCycleColorUp();
 
         setTimeout(self.resetDoubleClick, 500);

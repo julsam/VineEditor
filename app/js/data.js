@@ -3,7 +3,13 @@
 var FILETYPE = { JSON: "json", XML: "xml", TWEE: "twee", TWEE2: "tw2", UNKNOWN: "none", YARNTEXT: "yarn.txt" };
 
 
-ipc.on("loadFileFromDisk", function(event, path, operation) {
+// called by the main after opening dialogs -----------------------------------
+
+ipc.on("new-file", function(event) {
+    data.newFile();
+});
+
+ipc.on("open-file", function(event, path, operation) {
     if (operation == "tryOpenFile") {
         data.openFile(path);
     }
@@ -15,7 +21,7 @@ ipc.on("loadFileFromDisk", function(event, path, operation) {
     }
 });
 
-ipc.on("saveFileToDisk", function(event, path, type, content) {
+ipc.on("save-file", function(event, path, type, content) {
     data.editingType(type);
     data.saveTo(path, content);
     app.refreshWindowTitle(path);
@@ -25,6 +31,30 @@ ipc.on("loadYarnDataObject", function(event, yarnData) {
     console.log("Loading YARN data From Game engine...");
     data.loadData(JSON.stringify(yarnData), FILETYPE.JSON, true);
 });
+
+// called by the main process menu --------------------------------------------
+
+ipc.on("try-new-file", function(event) {
+    data.tryNewFile();
+});
+
+ipc.on("try-save-current", function(event) {
+    if (data.editingPath() != null) {
+        data.trySaveCurrent();
+    } else {
+        data.trySave(FILETYPE.JSON);
+    }
+});
+
+ipc.on("try-save", function(event) {
+    data.trySave(FILETYPE.JSON);
+});
+
+ipc.on("try-append", function(event) {
+    data.tryAppend();
+});
+
+// ----------------------------------------------------------------------------
 
 var data =
 {
@@ -48,7 +78,6 @@ var data =
                 }
                 else {
                     data.editingPath(filename);
-                    console.log("opening: " + filename);
                     appSettings.set("config.lastFile", filename);
                     data.editingType(type);
                     data.loadData(contents, type, clearNodes);
@@ -79,6 +108,23 @@ var data =
             reader.readAsText(e.target.files[0], "UTF-8");
         }
         */
+    },
+
+    newFile: function()
+    {
+        app.nodes.removeAll();
+
+        data.editingPath(null);
+        data.editingType("");
+        appSettings.set("config.lastFile", "");
+
+        app.refreshWindowTitle("");
+
+        const winXCenter = $(window).width() / 2;
+        const winYCenter = $(window).height() / 2;
+
+        app.warpToNodeXY(winXCenter, winYCenter);
+        app.newNodeAt(winXCenter, winYCenter).title("Start");
     },
 
     openFile: function(filename)
@@ -513,27 +559,34 @@ var data =
         }
     },
 
+    tryNewFile: function()
+    {
+        const hasUnsavedChanges = false; // TODO
+        ipc.send("new-file-dialog", hasUnsavedChanges);
+        // data.openFileDialog($("#open-file"), data.openFile);
+    },
+
     tryOpenFile: function()
     {
-        ipc.send("openFileDialog", "tryOpenFile");
+        ipc.send("open-file-dialog", "tryOpenFile");
         // data.openFileDialog($("#open-file"), data.openFile);
     },
 
     tryAppend: function()
     {
-        ipc.send("appendFileDialog", "tryAppendFile");
+        ipc.send("append-file-dialog", "tryAppendFile");
     },
 
     tryOpenFolder: function()
     {
-        ipc.send("openDirectoryDialog", "tryOpenFolder");
+        ipc.send("open-directory-dialog", "tryOpenFolder");
     },
 
     trySave: function(type)
     {
         data.editingType(type);
         // data.saveFileDialog($("#save-file"), type, data.getSaveData(type));
-        ipc.send("saveFileDialog", type, data.getSaveData(type));
+        ipc.send("save-file-dialog", type, data.getSaveData(type));
     },
 
     trySaveCurrent: function()
