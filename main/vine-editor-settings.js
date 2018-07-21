@@ -2,8 +2,8 @@
 
 // Imports
 const electron_is = require("electron-is");
-var _settings;
-var _fs;
+let _settings;
+let _fs;
 if (electron_is.main()) {
     _settings = require("electron-settings");
     _fs = require("fs");
@@ -26,12 +26,13 @@ const defaultSettings = {
         width: 1280,
         height: 800,
         maximized: false,
-        currentPath: "" // Not used yet
+        lastFile: ""
     },
     prefs: {
         vineBinPath: "", // Not used yet
         snapToGrid: false,
         nodeConnectionTypeId: 0,
+        openLastFileOnStart: true,
         theme: [ // Not used yet
             "blue"
         ],
@@ -119,9 +120,14 @@ class VineEditorSettings
             this._checkMissingValue("config.width", defaultSettings.config.width);
             this._checkMissingValue("config.height", defaultSettings.config.height);
             this._checkMissingValue("config.maximized", defaultSettings.config.maximized);
+            this._checkMissingValue("config.lastFile", defaultSettings.config.lastFile);
 
             // user preferences
             this._checkMissingValue("prefs.snapToGrid", defaultSettings.prefs.snapToGrid);
+            this._checkMissingValue(
+                "prefs.openLastFileOnStart",
+                defaultSettings.prefs.openLastFileOnStart
+            );
             this._checkMissingValue(
                 "prefs.nodeConnectionTypeId",
                 defaultSettings.prefs.nodeConnectionTypeId

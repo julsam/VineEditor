@@ -1,16 +1,17 @@
+
+
 var FILETYPE = { JSON: "json", XML: "xml", TWEE: "twee", TWEE2: "tw2", UNKNOWN: "none", YARNTEXT: "yarn.txt" };
 
-const ipc = require("electron").ipcRenderer;
 
 ipc.on("loadFileFromDisk", function(event, path, operation) {
     if (operation == "tryOpenFile") {
-        data.openFile(event, path);
+        data.openFile(path);
     }
     else if (operation == "tryAppendFile") {
-        data.appendFile(event, path);
+        data.appendFile(path);
     }
     else if (operation == "tryOpenFolder") {
-        data.openFolder(event, path);
+        data.openFolder(path);
     }
 });
 
@@ -31,28 +32,28 @@ var data =
     editingType: ko.observable(""),
     editingFolder: ko.observable(null),
 
-    readFile: function(e, filename, clearNodes)
+    readFile: function(filename, clearNodes=false)
     {
-        if (app.fs != undefined)
+        if (fs != undefined)
         {
-            if (app.fs.readFile(filename, "utf-8", function(error, contents)
+            fs.readFile(filename, "utf-8", function(error, contents)
             {
                 if (error) {
-
+                    alert("Error Opening " + filename + ": " + error);
+                    return;
                 }
-                else
-                {
-                    var type = data.getFileType(filename);
-                    if (type == FILETYPE.UNKNOWN)
-                        alert("Unknown filetype!");
-                    else
-                    {
-                        data.editingPath(filename);
-                        data.editingType(type);
-                        data.loadData(contents, type, clearNodes);
-                    }
+                const type = data.getFileType(filename);
+                if (type === FILETYPE.UNKNOWN) {
+                    alert("Unknown filetype!");
                 }
-            }));
+                else {
+                    data.editingPath(filename);
+                    console.log("opening: " + filename);
+                    appSettings.set("config.lastFile", filename);
+                    data.editingType(type);
+                    data.loadData(contents, type, clearNodes);
+                }
+            });
         }
         else
         {
@@ -80,9 +81,9 @@ var data =
         */
     },
 
-    openFile: function(e, filename)
+    openFile: function(filename)
     {
-        data.readFile(e, filename, true);
+        data.readFile(filename, true);
         app.refreshWindowTitle(filename);
 
         // update search to disable the new nodes,
@@ -90,15 +91,15 @@ var data =
         setTimeout(app.updateSearch, 300);
     },
 
-    openFolder: function(e, foldername)
+    openFolder: function(foldername)
     {
         data.editingFolder(foldername);
-        alert("openFolder not yet implemented e: " + e + " foldername: " + foldername);
+        alert("openFolder not yet implemented, foldername: " + foldername);
     },
 
-    appendFile: function(e, filename)
+    appendFile: function(filename)
     {
-        data.readFile(e, filename, false);
+        data.readFile(filename, false);
         
         // update search to disable the new nodes,
         // wait 300ms for them to be created / animated
@@ -107,8 +108,6 @@ var data =
 
     getFileType: function(filename)
     {
-        var clone = filename;
-
         if (filename.toLowerCase().indexOf(".json") > -1) {
             return FILETYPE.JSON;
         } else if (filename.toLowerCase().indexOf(".yarn.txt") > -1) {
@@ -122,6 +121,7 @@ var data =
         }
         return FILETYPE.UNKNOWN;
         /*
+        var clone = filename;
         // is json?
         if (/^[\],:{}\s]*$/.test(clone.replace(/\\["\\\/bfnrtu]/g, '@').
             replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
@@ -441,14 +441,16 @@ var data =
 
     saveTo: function(path, content)
     {
-        if (app.fs != undefined)
+        if (fs != undefined)
         {
-            app.fs.writeFile(path, content, {encoding: "utf-8"}, function(err)
+            fs.writeFile(path, content, {encoding: "utf-8"}, function(err)
             {
-                data.editingPath(path);
-                if(err) {
+                if (err) {
                     alert("Error Saving Data to " + path + ": " + err);
+                    return;
                 }
+                appSettings.set("config.lastFile", path);
+                data.editingPath(path);
             });
         }
     },
@@ -485,7 +487,7 @@ var data =
     // Not used since electron port TODO: should be removed?
     saveFileDialog: function(dialog, type, content)
     {
-        if (app.fs)
+        if (fs)
         {
             dialog.attr("nwsaveas", file);
             data.openFileDialog(dialog, function(e, path)

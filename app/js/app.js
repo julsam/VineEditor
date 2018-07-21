@@ -5,6 +5,8 @@ const remote = electron.remote;
 const Marquee = require("./js/marquee");
 const Draw = require("./js/draw");
 const appSettings = remote.require("./main/vine-editor-settings");
+const fs = remote.require("graceful-fs");
+const ipc = electron.ipcRenderer;
 
 var App = function(name, version)
 {
@@ -33,7 +35,7 @@ var App = function(name, version)
     this.transformOrigin = [0, 0];
     this.shifted = false;
     this.isElectron = false;
-    self.allowSelectNextNode = true; // allows toggle nodes with spacebar
+    this.allowSelectNextNode = true; // allows toggle nodes with spacebar
     
     this.UPDATE_ARROWS_THROTTLE_MS = 25;
 
@@ -47,7 +49,6 @@ var App = function(name, version)
     if (typeof(require) == "function")
     {
         this.gui = remote.getCurrentWindow();
-        this.fs = remote.require("graceful-fs");
         this.isElectron = true;
     }
 
@@ -68,7 +69,13 @@ var App = function(name, version)
 
         self.canvas = $(".arrows")[0];
         self.context = self.canvas.getContext("2d");
-        self.newNode().title("Start");
+
+        const lastFile = appSettings.get("config.lastFile", "");
+        if (lastFile !== "" && appSettings.get("prefs.openLastFileOnStart", false)) {
+            data.openFile(lastFile);
+        } else {
+            self.newNode().title("Start");
+        }
 
         // search field
         self.$searchField.on("keyup", function(e)
@@ -591,7 +598,7 @@ var App = function(name, version)
         };
         document.body.ondrop = e => {
             e.preventDefault();
-            data.openFile($("#open-file"), e.dataTransfer.files[0].path);
+            data.openFile(e.dataTransfer.files[0].path);
             for (var i = 1; i < e.dataTransfer.files.length; i++) {
                 data.appendFile(e, e.dataTransfer.files[i].path, false);
             }
