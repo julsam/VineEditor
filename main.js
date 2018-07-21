@@ -228,11 +228,6 @@ function createWindow() {
             }
         });
     });
-
-    ipcMain.on("sendYarnDataToObject", (event, content, startTestNode) => { // in case you wanna export yarn object to another embedded app
-        // otherApp.webContents.send("yarnSavedStory",content);
-        // mainWindow.close();
-    })
     
     ipcMain.on("testYarnStoryFrom", (event, content, startTestNode) => {
         createYarnTesterWindow(content, startTestNode);

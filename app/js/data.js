@@ -630,10 +630,5 @@ var data =
         {
             data.saveTo(data.editingPath(), data.getSaveData(data.editingType()));
         }
-    },
-
-    sendToExternalApp: function()
-    {
-        ipc.send("sendYarnDataToObject", JSON.parse(data.getSaveData(FILETYPE.JSON)));
-    },
+    }
 }
