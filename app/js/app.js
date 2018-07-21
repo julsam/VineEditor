@@ -647,7 +647,10 @@ var App = function(name, version)
 
     this.refreshWindowTitle = function(editingPath)
     {
-        let title = "Vine Editor - [" + editingPath + "] ";
+        let title = "Vine Editor";
+        if (editingPath !== "") {
+            title += " - [" + editingPath + "]";
+        }
         if (!self.isElectron) {
             document.title = title;
         } else {
