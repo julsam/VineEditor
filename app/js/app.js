@@ -72,7 +72,11 @@ var App = function(name, version)
 
         const lastFile = appSettings.get("config.lastFile", "");
         if (lastFile !== "" && appSettings.get("prefs.openLastFileOnStart", false)) {
-            data.openFile(lastFile);
+            if (data.readFileSync(lastFile, false, false) === true) {
+                self.refreshWindowTitle(lastFile);
+            } else {
+                self.newNode().title("Start");
+            }
         } else {
             self.newNode().title("Start");
         }

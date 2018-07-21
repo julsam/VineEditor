@@ -110,6 +110,41 @@ var data =
         */
     },
 
+    readFileSync: function(filename, clearNodes=true, showErrorMsg=true)
+    {
+        if (fs != undefined)
+        {
+            try {
+                const type = data.getFileType(filename);
+                if (type === FILETYPE.UNKNOWN) {
+                    if (showErrorMsg) {
+                        alert("Unknown filetype!");
+                    }
+                    return false;
+                }
+                const contents = fs.readFileSync(filename, "utf-8");
+                data.editingPath(filename);
+                appSettings.set("config.lastFile", filename);
+                data.editingType(type);
+                data.loadData(contents, type, clearNodes);
+                return true;
+            }
+            catch(err) {
+                if (showErrorMsg) {
+                    alert("Error Opening " + filename + ": " + err);
+                }
+                return false;
+            }
+        }
+        else
+        {
+            if (showErrorMsg) {
+                alert("Unable to load file from your browser");
+            }
+            return false;
+        }
+    },
+
     newFile: function()
     {
         app.nodes.removeAll();

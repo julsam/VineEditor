@@ -156,7 +156,6 @@ function createWindow() {
         // Dereference the window object
         mainWindow = null;
     });
-    
 
     ipcMain.on("modeChanged", (event, mode) => {
         if (mode === "textEditorMode") {
