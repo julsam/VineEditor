@@ -3,7 +3,6 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
 const url = require("url");
 const path = require("path");
 const isDev = require("electron-is").dev();
-const versionNumber = require("./package.json").version;
 const appSettings = require("./main/vine-editor-settings");
 const menuTemplate = require("./main/vine-editor-menu");
 const ScreenHelpers = require("./main/screen-helpers");
@@ -112,7 +111,7 @@ function createWindow() {
     
     mainWindow.webContents.on("dom-ready", () => {
         // launch the app with the current version number
-        mainWindow.webContents.send("launchApp", versionNumber);
+        mainWindow.webContents.send("launchApp", app.getVersion());
     });
 
     if (isDev) {
