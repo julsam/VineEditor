@@ -1041,10 +1041,10 @@ var App = function(name, version)
                     var linked = node.linkedTo()[link];
 
                     // get origins
-                    var fromX = (node.x() + node.tempWidth/2) * scale + offset.left;
-                    var fromY = (node.y() + node.tempHeight/2) * scale + offset.top;
-                    var toX = (linked.x() + linked.tempWidth/2) * scale + offset.left;
-                    var toY = (linked.y() + linked.tempHeight/2) * scale + offset.top;
+                    var fromX = (node.x() + node.tempWidth / 2) * scale + offset.left;
+                    var fromY = (node.y() + node.tempHeight / 2) * scale + offset.top;
+                    var toX = (linked.x() + linked.tempWidth / 2) * scale + offset.left;
+                    var toY = (linked.y() + linked.tempHeight / 2) * scale + offset.top;
 
                     // get the normal
                     var distance = Math.sqrt(
