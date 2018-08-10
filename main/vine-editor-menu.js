@@ -61,7 +61,12 @@ const menuTemplate = [
             {role: "copy"},
             {role: "paste"},
             {role: "delete"},
-            {role: "selectall"}
+            {role: "selectall"},
+            {type: "separator"},
+            {
+                label: "Find",
+                accelerator: "CmdOrCtrl+F"
+            }
         ]
     },
     {
