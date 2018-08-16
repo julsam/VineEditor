@@ -43,7 +43,7 @@ function createWindow() {
         // It's visible when the app is slow to load, or the time of a frame
         // when resizing. The color should correspond to the one defined for
         // the body of the #app-bg
-        backgroundColor: "#a7dee4"
+        backgroundColor: "#80ceff"
         // frame: false
         //icon: "Yarn.png",
         //autoHideMenuBar:true

@@ -11,14 +11,18 @@ body {
     -webkit-user-select: none;
     line-height: 1.6em;
     background: #000;
-    /* background-image: -webkit-linear-gradient(45deg, #cccaf1 0%, #a7dee4 100%); */
     /* background-image: -webkit-linear-gradient(45deg, #ddc9b9 0%, #daf0f2 100%); */
+    /* background-image: -webkit-linear-gradient(45deg, #cccaf1 0%, #a7dee4 100%); */
     /* background-image: -webkit-linear-gradient(45deg, #e8dbc5 0%, #a7dee4 100%); */
     /* background-image: -webkit-linear-gradient(45deg, #b5cbe0 0%, #a7dee4 100%); */
     /* background: -webkit-linear-gradient(45deg,  #e8dbc5 5%, #caccf1 5%, #a7dee4 70%, #a7dee4 95%, #e8dbc5 95%); */
     /* background: -webkit-linear-gradient(45deg, #def1de 30%, #a7dee4 70%); */
     /* background: -webkit-linear-gradient(45deg, #def1de 0%, #a7dee4 100%); */
-    background: -webkit-linear-gradient(45deg, #caccf1 0%, #a7dee4 70%);
+    /* background: -webkit-linear-gradient(45deg, #caccf1 0%, #a7dee4 70%); */
+    /* background: -webkit-linear-gradient(45deg, #bad1ef 0%, #a7dee4 70%); */
+    /* background: -webkit-linear-gradient(45deg, #def1de 0%, #2d9de6 100%); */
+    /* background: -webkit-linear-gradient(45deg, #2f3136 0%, #36393f 100%); */
+    background: -webkit-linear-gradient(45deg, #dcdcdc 0%, #dedede 100%);
 }
 
 /* Move the view around */
@@ -397,7 +401,6 @@ a:hover {
     border: 1px solid rgba(0, 0, 0, 0);
     border-top: 1px solid #fff;
     cursor: pointer;
-    transition: border 0.25s;
 }
 
 .node:hover {
@@ -409,14 +412,15 @@ a:hover {
     box-shadow: 0 0px 8px 0 rgba(11, 137, 245, 0.37);
 }
 .node.focused {
-    border: 1px solid rgba(247, 148, 0, 1);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(11, 137, 245, 1);
+    box-shadow: 0 0px 0px 1px rgba(11, 137, 245, 1),
+                0 0px 4px 0 rgba(11, 137, 245, 1);
 }
 .node.selected.focused,
 .node.focused:hover {
-    border: 1px solid rgba(247, 148, 0, 1);
-    box-shadow: 0 0px 0px 2px rgba(11, 137, 245, 0.5),
-                0 0px 8px 0 rgba(11, 137, 245, 0.37);
+    border: 1px solid rgba(11, 137, 245, 1);
+    box-shadow: 0 0px 0px 1px rgba(11, 137, 245, 1),
+                0 0px 4px 0 rgba(11, 137, 245, 1);
 }
 
 .zoomLevel-1 .node {

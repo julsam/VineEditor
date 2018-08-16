@@ -1,0 +1,46 @@
+body {
+    /* background: -webkit-linear-gradient(45deg, #ddc9b9 0%, #daf0f2 100%); */
+    /* background-image: linear-gradient(#5480D3, #3256A7); */
+    /* background-image: linear-gradient(#5480D3, #2769ad); */
+    /* background-image: linear-gradient(#6b92dc, #2769ad); */
+    /* background-image: linear-gradient(#5ea1f1, #2769ad); */
+    /* background-image: linear-gradient(#5ea1f1, #3256A7); */
+    /* background: -webkit-linear-gradient(45deg, #5480D3 0%, #2d9de6 100%); */
+    /* background: -webkit-linear-gradient(45deg, #def1de 0%, #2d9de6 100%); */
+    /* background: #a9deff; */
+    background: #80ceff;
+}
+#app-bg {
+    background-image: url("../images/grid-bg-100x100-100px25px-trans-2-1.png");
+}
+
+#marquee {
+    /* border: 1px solid #353535;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid #5585b7;
+    background-color: rgba(0, 94, 169, 0.2); */
+    border: 1px solid #00a0ff;
+    background-color: rgba(10, 96, 164, 0.3);
+}
+
+.node:hover {
+    border: 1px solid #f79400;
+    box-shadow: 0 0px 1px 0px #f79400;
+}
+.node.selected {
+    border: 1px solid #f79400;
+    box-shadow: 0 0px 1px 0px #f79400;
+}
+.node.focused {
+    border: 1px solid #f79400;
+    box-shadow: 0 0px 0px 1px #f79400, 0 0px 4px 0px #f79400;
+}
+.node.selected.focused,
+.node.focused:hover {
+    border: 1px solid #f79400;
+    box-shadow: 0 0px 0px 1px #f79400, 0 0px 4px 0px #f79400;
+}
+
+.app-search input:focus {
+    outline: 5px auto #f79400;
+}
