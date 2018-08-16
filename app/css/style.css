@@ -649,7 +649,7 @@ a:hover {
 /* --- MARQUEE --- */
 
 #marquee {
-    z-index: 10000;
+    z-index: 10;
     display: block;
     position: absolute;
     pointer-events: none;
