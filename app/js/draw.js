@@ -61,7 +61,7 @@ var Draw =
         // ctx.fill();
         // ctx.closePath();
 
-        var angle = Draw.findAngle(
+        var angle = Draw.angleRadians(
             from.x, from.y, to.x, to.y
         );
 
@@ -119,7 +119,7 @@ var Draw =
         // ctx.fill();
         // ctx.closePath();
 
-        var angle = Draw.findAngle(
+        var angle = Draw.angleRadians(
             cx,
             cy,
             to.x,
@@ -156,10 +156,37 @@ var Draw =
         ctx.translate(-locx, -locy);
     },
 
-    // returns radians
-    findAngle: function(sx, sy, ex, ey) {
+    /**
+     * Returns angle in degrees.
+     */
+    angleDeg: function(sx, sy, ex, ey) {
+        let theta = Math.atan2(ey - sy, ex - sx) * 180 / Math.PI; // range (-180, 180]
+        if (theta < 0) {
+            theta += 360; // range [0, 360)
+        }
+        return theta;
+    },
+
+    /**
+     * Returns angle in radians.
+     */
+    angleRadians: function(sx, sy, ex, ey) {
         // make sx and sy at the zero point
-        return Math.atan2((ey - sy), (ex - sx));
+        return Math.atan2(ey - sy, ex - sx);
+    },
+
+    /**
+     * Degrees to cardinal direction from a clockwise angle.
+     */
+    degToCardinal: function(angle) {
+        const dir = ["E", "S", "W", "N"]
+        return dir[Math.floor(((angle + (360 / 4) / 2) % 360) / (360 / 4))];
+    },
+
+    getPointOffset: function(angle) {
+        // E, S, W, N
+        const dir = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}]
+        return dir[Math.floor(((angle + (360 / 4) / 2) % 360) / (360 / 4))];
     }
 }
 
