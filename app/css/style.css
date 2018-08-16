@@ -595,6 +595,11 @@ a:hover {
     color: #555;
 }
 
+/* Temp */
+.node-editor .form .app-menu {
+    top: 60px;
+}
+
 /* --- EDITOR HIGHLIGHTING --- */
 
 .editor p, .node .body p { 
