@@ -99,7 +99,7 @@
     },
     "devDependencies": {
         "@types/graceful-fs": "^4.1.2",
-        "electron": "^2.0.2",
+        "electron": "^2.0.8",
         "electron-builder": "^20.15.1"
     },
     "dependencies": {
