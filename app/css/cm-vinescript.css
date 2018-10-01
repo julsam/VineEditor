@@ -1,0 +1,31 @@
+/*
+    Default Theme for Vine Editor
+*/
+
+.cm-s-default .cm-comment { color: #a50; }
+.cm-s-default .cm-operator { color: rgb(26, 122, 26); }
+.cm-s-default .cm-stmt,
+.cm-s-default .cm-display { color: #708; }
+.cm-s-default .cm-variable { color: blue; }
+.cm-s-default .cm-link { color: rgb(27, 88, 255); text-decoration: none; }
+.cm-s-default .cm-link-sep { color: rgb(27, 88, 255); }
+.cm-s-default .cm-link-title { color: inherit; }
+.cm-s-default .cm-link-dest {
+    color: rgb(5, 83, 173);
+    text-decoration: underline;
+}
+.cm-s-default .cm-lcollapse,
+.cm-s-default .cm-rcollapse,
+.cm-s-default .cm-collapse {
+    background: rgba(128, 128, 128, 0.1);
+}
+.cm-s-default .cm-verbatim {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.cm-vinescript-cursor.cm-variable {
+    border-bottom: 2px solid darkgray;
+}
+.cm-vinescript-variableOccurrence {
+    background: rgba(143, 214, 255, 0.46);
+}

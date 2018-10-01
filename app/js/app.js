@@ -529,12 +529,7 @@ var App = function(name, version)
         });
 
         $(window).on("resize", self.updateArrowsThrottled);
-
-        $(document).on("keyup keydown mousedown mouseup", function(e) {
-            if (self.editing() != null) {
-                self.updateEditorStats();
-            }
-        });
+        
         // apple command key
         //$(window).on('keydown', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = true; } });
         //$(window).on('keyup', function(e) { if (e.keyCode == 91 || e.keyCode == 93) { self.appleCmdKey = false; } });
@@ -868,8 +863,6 @@ var App = function(name, version)
             //enable_spellcheck();
             contents_modified = true;
             //spell_check();
-
-            self.updateEditorStats();
         }
     }
 
@@ -1088,11 +1081,10 @@ var App = function(name, version)
         text = text.replace(/\</g, '&lt;');
         text = text.replace(/\>/g, '&gt;');
         text = text.replace(/\&lt;\&lt;(.*?)\&gt;\&gt;/g, '<p class="conditionbounds">&lt;&lt;</p><p class="condition">$1</p><p class="conditionbounds">&gt;&gt;</p>');
-        text = text.replace(/\[\[([^\|]*?)\]\]/g, '<p class="linkbounds">[[</p><p class="linkname">$1</p><p class="linkbounds">]]</p>');
-        text = text.replace(/\[\[([^\[\]]*?)\|([^\[\]]*?)\]\]/g, '<p class="linkbounds">[[</p>$1<p style="color:red"><p class="linkbounds">|</p><p class="linkname">$2</p><p class="linkbounds">]]</p>');
+        text = text.replace(/\[\[([^\|]*?)\]\]/g, '<p class="linkbounds">[[</p><p class="linkname linkerror">$1</p><p class="linkbounds">]]</p>');
+        text = text.replace(/\[\[([^\[\]]*?)\|([^\[\]]*?)\]\]/g, '<p class="linkbounds">[[</p>$1<p class="linkerror"><p class="linkbounds">|</p><p class="linkname linkerror">$2</p><p class="linkbounds">]]</p>');
         text = text.replace(/\/\/(.*)?($|\n)/g, '<span class="comment">//$1</span>\n');
         text = text.replace(/\/\*((.|[\r\n])*)?\*\//gm, '<span class="comment">/*$1*/</span>');
-        text = text.replace(/\/\%((.|[\r\n])*)?\%\//gm, '<span class="comment">/%$1%/</span>');
 
         // create a temporary document and remove all styles inside comments
         var div = $("<div>");
@@ -1109,8 +1101,9 @@ var App = function(name, version)
             var found = false;
             for (var i in self.nodes())
             {
-                if (self.nodes()[i].title().toLowerCase() == name.toLowerCase()) {
+                if (self.nodes()[i].title().toLowerCase().trim() == name.toLowerCase()) {
                     found = true;
+                    $(this).removeClass("linkerror");
                     break;
                 }
             }
@@ -1123,6 +1116,7 @@ var App = function(name, version)
         return text;
     }
 
+    // called by updateHighlights, not actually used
     this.updateLineNumbers = function(text)
     {
         // update line numbers
@@ -1137,12 +1131,14 @@ var App = function(name, version)
         $(".editor-container .lines").html(lineNumbers);
     }
 
+    // never used...
     this.updateHighlights = function(e)
     {
         if (e.keyCode == 17 || (e.keyCode >= 37 && e.keyCode <= 40)) {
             return;
         }
 
+        // TODO this is not how you access text with CM
         // get the text
         var editor = $(".editor");
         var text = editor[0].innerText;
@@ -1519,20 +1515,5 @@ var App = function(name, version)
     {
         self.$searchField.val("");
         self.updateSearch();
-    }
-
-
-    this.updateEditorStats = function()
-    {
-        var editor = ace.edit("editor");
-        var text = editor.getSession().getValue();
-        var cursor = editor.getCursorPosition();
-
-        var lines = text.split("\n");
-
-        $(".editor-footer .character-count").html(text.length);
-        $(".editor-footer .line-count").html(lines.length);
-        $(".editor-footer .row-index").html(cursor.row);
-        $(".editor-footer .column-index").html(cursor.column);
     }
 }

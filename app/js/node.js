@@ -12,6 +12,7 @@ var Node = function()
     this.title = ko.observable("Node" + this.index());
     this.tags = ko.observable("");
     this.body = ko.observable("Empty Text");
+    this.doc = ko.observable(null); // CodeMirror Doc
     //this.x = ko.observable(128);
     //this.y = ko.observable(128);
     this.active = ko.observable(true);
@@ -415,7 +416,7 @@ var Node = function()
             {
                 var other = app.nodes()[index];
                 for (var i = 0; i < links.length; i++) {
-                    if (other != self && other.title().toLowerCase() == links[i]) {
+                    if (other != self && other.title().toLowerCase().trim() == links[i]) {
                         self.linkedTo.push(other);
                     }
                 }

@@ -546,7 +546,8 @@ a:hover {
     box-shadow: 0px 1px 1px #000;
 }
 
-.node-editor .form input[type="text"] {
+.node-editor .form input.title,
+.node-editor .form input.tags {
     box-sizing: border-box;
     width: 100%;
     font-size: 1.2em;
@@ -601,6 +602,7 @@ a:hover {
 }
 
 /* --- EDITOR HIGHLIGHTING --- */
+/* see cm-vinescript.css */
 
 .editor p, .node .body p { 
     display: inline;
@@ -608,24 +610,34 @@ a:hover {
     padding: 0;
 }
 
-.linkname {
-    color: #3ecfe9;
+.node .body .linkname {
+    /* color: #3ecfe9; */
+    color: rgb(5, 83, 173);
 }
 
-.linkbounds {
-    color: #0ec0e0;
+.node .body .linkbounds {
+    /* color: #0ec0e0; */
+    color: rgb(27, 88, 255);
 }
 
-.condition {
-    color: #e93ecf;
+.node .body .linkerror {
+    /* color: #3ecfe9; */
+    color: red;
 }
 
-.conditionbounds {
-    color: #e00ec0;
+.node .body .condition {
+    /* color: #e93ecf; */
+    color: #708;
 }
 
-.comment {
-    color: #44fe66;
+.node .body .conditionbounds {
+    /* color: #e00ec0; */
+    color: #708;
+}
+
+.node .body .comment {
+    /* color: #44fe66; */
+    color: #a50;
 }
 
 /* --- NODE DELETE --- */

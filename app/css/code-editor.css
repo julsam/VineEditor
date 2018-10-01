@@ -1,0 +1,71 @@
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('../fonts/source-code-pro/SourceCodePro-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('../fonts/source-code-pro/SourceCodePro-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.CodeMirror {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    height: calc(100% - 10px);
+    line-height: normal;
+    color: #4d4d4d;
+    font-size: 0.9em;
+    font-family: "Source Code Pro", "Lucida Console", Monaco, monospace;
+}
+
+/* removes editor's top and bottom padding */
+.CodeMirror-lines {
+    padding: 0;
+}
+
+.CodeMirror-gutters {
+    background: #e8e8e8;
+    color: #AAA;
+    border: 0;
+}
+.CodeMirror-gutter-background.CodeMirror-activeline-gutter {
+    background-color : rgba(0, 0, 0, 0.07);
+}
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+    margin: -1px 0 0 -1px;
+    border: 1px solid rgb(192, 192, 192);
+}
+
+.CodeMirror pre.CodeMirror-placeholder {
+    color: #999;
+}
+
+.CodeMirror-activeline-background { background: rgb(255, 255, 204); }
+.CodeMirror-selected { background: #d9d9d9; }
+.CodeMirror-focused .CodeMirror-selected,
+.cm-matchhighlight.CodeMirror-selectedtext {
+    background: rgb(181, 213, 255);
+}
+
+/* .CodeMirror-focused .cm-matchhighlight {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFklEQVQI12NgYGBgkKzc8x9CMDAwAAAmhwSbidEoSQAAAABJRU5ErkJggg==);
+    background-position: bottom;
+    background-repeat: repeat-x;
+} */
+.cm-matchhighlight:not(.CodeMirror-selectedtext .cm-searching) {
+    /* background-color: rgba(144, 238, 144, 0.4); */
+    background: rgb(250, 250, 255);
+    border: 1px solid rgb(200, 200, 250);
+}
+
+/* Selection Highlight in the scrollbar */
+.CodeMirror-selection-highlight-scrollbar {
+    background-color: rgba(35, 134, 35, 0.5);
+    border-top: 1px solid green;
+    border-bottom: 1px solid green;
+}
