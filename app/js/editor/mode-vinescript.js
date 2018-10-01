@@ -133,7 +133,7 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
             
             // If the cursor is at the end of the passage, or there is no text, then
             // the returned token will be null.
-            if (!token) {
+            if (!token || !token.type) {
                 return;
             }
             
@@ -149,7 +149,8 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
             
             // If the token is a variable, then highlight all other occurrences
             // of the variable in the passage.
-            if (token.type === "variable") {
+            // Use indexOf because it can have multiple types like "collapse variable"
+            if (token.type.indexOf("variable") >= 0) {
                 referenceVariables.forEach(e => {
                     if (e.start === token.start && e.end === token.end && e.line === from.line) {
                         // exclude the one that's currently under the cursor
