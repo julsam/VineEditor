@@ -565,10 +565,9 @@ a:hover {
 }
 
 .node-editor .form .editor-container {
-    margin-top: 20px;
+    margin-top: 10px;
     width: 100%;
     height: calc(100% - 120px);
-    float: left;
 }
 
 .node-editor .form .editor {
@@ -584,14 +583,25 @@ a:hover {
 }
 
 .node-editor .form .editor-footer {
-    width: 100%;
-    text-align: right;
     font-size: 0.75em;
+    line-height: 1;
     font-family: "Lucida Console", Monaco, monospace;
+    /* background: #e8e8e8; */
     color: #777;
+    list-style: none;
+    margin: 2px 0;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    justify-content: flex-end;
 }
-
-.node-editor .form .editor-footer span {
+.node-editor .form .editor-footer .item-info {
+    display: block;
+    padding: 8px 8px 4px;
+}
+.node-editor .form .editor-footer .item-info:hover {
+    /* background:#f8f8f8; */
+}
+.node-editor .form .editor-footer .item-info span {
     font-weight: bold;
     color: #555;
 }
