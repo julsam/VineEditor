@@ -200,7 +200,6 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
                     state.incomment = false;
                 }
                 return "comment";
-            
             }
             // Stmt << ... >> or Display {{ ... }}
             else if (state.instmt || state.indisplay)
@@ -345,24 +344,21 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
                 state.inlink = true;
                 return "link";
             }
-            else if (stream.eat("/")) // Comments (block and line)
+            else if (stream.match(/\/\//)) // Line Comment //
             {
-                if (stream.eat("*"))
-                {
-                    state.incomment = true;
-                    if (!stream.skipTo("*/")) {
-                        stream.skipToEnd();
-                    } else {
-                        stream.eatWhile(/\*|\//);
-                        state.incomment = false;
-                    }
-                    return "comment";
-                }
-                else if (stream.eat("/"))
-                {
+                stream.skipToEnd();
+                return "comment";
+            }
+            else if (stream.match(/\/\*/)) // Block Comments /*
+            {
+                state.incomment = true;
+                if (!stream.skipTo("*/")) {
                     stream.skipToEnd();
-                    return "comment";
+                } else {
+                    stream.eatWhile(/\*|\//);
+                    state.incomment = false;
                 }
+                return "comment";
             }
             // Opening Collapse {
             else if (stream.match(/\{/) && !state.incollapse)
