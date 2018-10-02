@@ -4,6 +4,35 @@
 // const remote = electron.remote;
 // const appSettings = remote.require("./main/vine-editor-settings");
 
+const placeholder = `You can write the text of your passage here.
+
+// And write comments like this
+
+To display special symbols without them being transformed, put them between \`backticks\`.
+
+To link to another passage, put two square brackets around its name, [[like this]].
+Or you can write the link text and the passage name like this: [[link text|passage name]].
+
+Instructions like \`<<set>>\` and \`<<unset>>\` are for setting or deleting the variables of your passage. If you've \`<<set>>\` a variable <<set myVar = "Hello">> you can display it in your passage using \`{{varname}}\`: {{myVar}}.
+
+You can also call functions in any instruction or display: \`<<set myVarUppercase = Uppercase(myVar)>> {{myVarUppercase}}\`.
+
+You can control the flow of your story using statements \`<<if>>\`, \`<<elif>>\`, \`<<else>>\` and \`<<for>>\`.
+<<if myVar == "Hello">>
+	Hi there! 👋
+<<else>>
+	Okay, bye!
+<<end>>
+
+You can collapse lines like this:
+{
+This sentence will be
+on one line with
+only single spaces.
+}
+
+Consult \`https://github.com/julsam/VineScript\` and \`https://github.com/julsam/VineEditor\` for more information.`;
+
 var toggleComment = function(editor) {
     // Only line comments are handled
     
@@ -54,8 +83,6 @@ var toggleComment = function(editor) {
  * Create a new CodeMirror instance configured for VineScript
  */
 module.exports.newVineEditor = (elementID) => {
-    // TODO make an informative placeholder
-    const placeholder = "Empty Text";
 
     let editor = CodeMirror.fromTextArea(document.getElementById(elementID), {
         // Options
