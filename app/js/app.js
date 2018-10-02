@@ -321,33 +321,7 @@ var App = function(name, version)
             var lastZoom = self.cachedScale;
             var scaleChange = event.deltaY * self.zoomSpeed * self.cachedScale;
 
-            self.cachedScale = Utils.clamp(
-                self.cachedScale + scaleChange, self.zoomLimitMin, self.zoomLimitMax
-            );
-           
-            // Remove css class starting with "zoomLevel"
-            $("body").removeClass(function(index, css) {
-                return (css.match(/(^|\s)zoomLevel\S+/g) || []).join(" ");
-            });
-
-            // Sets the appropriate zoom level class that changes some elements
-            // to make them more or less visibles depending on the zoom level
-            if (self.cachedScale < 0.15) {
-                $("body").addClass("zoomLevel-5");
-            } else if (self.cachedScale < 0.25) {
-                $("body").addClass("zoomLevel-4");
-            } else if (self.cachedScale < 0.5) {
-                $("body").addClass("zoomLevel-3");
-            } else if (self.cachedScale < 0.8) {
-                $("body").addClass("zoomLevel-2");
-            } else {
-                $("body").addClass("zoomLevel-1");
-            }
-
-            // Scaled background-size: 100px * scale
-            const scaledBgSize = Math.round(100 * self.cachedScale);
-            const bgsizeStr = scaledBgSize + "px " + scaledBgSize + "px";
-            document.getElementById("app-bg").style.backgroundSize = bgsizeStr;
+            self.setScale(self.cachedScale + scaleChange);
 
             var mouseX = event.pageX - self.transformOrigin[0];
             var mouseY = event.pageY - self.transformOrigin[1];
@@ -473,7 +447,7 @@ var App = function(name, version)
                     focusedNodeIdx = 0;
                 }
 
-                self.cachedScale = 1;
+                self.setScale(1);
                 if (isNodeSelected) {
                     self.warpToSelectedNodeIdx(focusedNodeIdx);
                 } else {
@@ -1515,5 +1489,36 @@ var App = function(name, version)
     {
         self.$searchField.val("");
         self.updateSearch();
+    }
+
+    this.setScale = function(newScale)
+    {
+        self.cachedScale = Utils.clamp(
+            newScale, self.zoomLimitMin, self.zoomLimitMax
+        );
+       
+        // Remove css class starting with "zoomLevel"
+        $("body").removeClass(function(index, css) {
+            return (css.match(/(^|\s)zoomLevel\S+/g) || []).join(" ");
+        });
+
+        // Sets the appropriate zoom level class that changes some elements
+        // to make them more or less visibles depending on the zoom level
+        if (self.cachedScale < 0.15) {
+            $("body").addClass("zoomLevel-5");
+        } else if (self.cachedScale < 0.25) {
+            $("body").addClass("zoomLevel-4");
+        } else if (self.cachedScale < 0.5) {
+            $("body").addClass("zoomLevel-3");
+        } else if (self.cachedScale < 0.8) {
+            $("body").addClass("zoomLevel-2");
+        } else {
+            $("body").addClass("zoomLevel-1");
+        }
+
+        // Scaled background-size: 100px * scale
+        const scaledBgSize = Math.round(100 * self.cachedScale);
+        const bgsizeStr = scaledBgSize + "px " + scaledBgSize + "px";
+        document.getElementById("app-bg").style.backgroundSize = bgsizeStr;
     }
 }
