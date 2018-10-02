@@ -847,8 +847,8 @@ var App = function(name, version)
 
     this.appendText = function(textToAppend) 
     {
-        self.editing().body(
-            self.editing().body()
+        self.editing().doc().setValue(
+            self.editing().doc().getValue()
             + " [[Answer:" + textToAppend + "|" + textToAppend + "]]"
         );
     }
