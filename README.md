@@ -25,7 +25,11 @@ MacOS: **Soon**
 
 Node connections work similar to Twine.
 
-![Screenshot](http://infiniteammo.com/Yarn/node-connections.jpg)
+![Screenshot](https://i.imgur.com/araUOVe.png)
+
+## Code Editor
+
+![Screenshot](https://i.imgur.com/1fkjv4A.png)
 
 ## Built With
 
