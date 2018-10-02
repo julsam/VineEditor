@@ -61,11 +61,3 @@
     right: 4px;
     top: 4px;
 }
-
-/* Confirm button in modal window */
-.node-delete .form .confirm {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-}

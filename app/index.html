@@ -163,7 +163,7 @@
             </div>
 
             <!-- ko if:app.editing() != null -->
-            <div class="node-editor" data-bind="mousedown:app.saveNode">
+            <div class="modal-overlay node-editor" data-bind="mousedown:app.saveNode">
                 <div class="form" data-bind="preventBubble: 'click', preventBubble: 'mousedown'">
                     
                     <div class="app-menu">
@@ -207,7 +207,7 @@
             <!-- /ko -->
 
             <!-- ko if:app.deleting() != null -->
-            <div class="node-delete" data-bind="click: function() { app.deleting(null); }">
+            <div class="modal-overlay node-delete" data-bind="click: function() { app.deleting(null); }">
 
                 <div class="form" data-bind="preventBubble: 'click'">
                     <!-- ko if: (app.deleting().selected && (app.getSelectedNodes().length > 1)) -->
