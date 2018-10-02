@@ -28,6 +28,7 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
         const number = /(?:-)?(?:\d)+(?:\.\d+)?/;
         const string = /"(?:[^\\]|\\.)*?(?:")/;
         const punctuation = /[\.,:]/;
+        const txt = /[^`\\<>\*\[\]\{\}\/\u000B\u001E\u001F]+/;
         // const indentEnding = {
         //     ">>": true, "}}": true, "]]": true, "}": true, "]": true
         // };
@@ -186,7 +187,9 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
                     state.verbatimRegex = null;
                     return "verbatim";
                 } else {
-                    stream.next();
+                    if (!stream.match(txt)) {
+                        stream.next();
+                    }
                     return "verbatim text";
                 }
             }
@@ -366,6 +369,12 @@ const {UnicodeLetters, UnicodeEmojis, UnicodeNumbers} = require("./js/editor/uni
                 state.incollapse = true;
                 return "lcollapse";
             }
+            // normal text
+            else if (stream.match(txt))
+            {
+                return "text";
+            }
+            // failsafe, fallback to text
             else
             {
                 stream.next();
