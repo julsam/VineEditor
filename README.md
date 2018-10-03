@@ -25,11 +25,11 @@ MacOS: **Soon**
 
 Node connections work similar to Twine.
 
-![Screenshot](https://i.imgur.com/araUOVe.png)
+![Node Connections](https://i.imgur.com/Okb0MnE.png)
 
 ## Code Editor
 
-![Screenshot](https://i.imgur.com/1fkjv4A.png)
+![Code Editor](https://i.imgur.com/1fkjv4A.png)
 
 ## Built With
 
