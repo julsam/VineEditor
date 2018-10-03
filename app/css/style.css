@@ -608,6 +608,9 @@ a:hover {
     -webkit-flex-flow: row wrap;
     justify-content: flex-end;
 }
+.node-editor .form .editor-footer li {
+    display: flex;
+}
 .node-editor .form .editor-footer .item-info {
     display: block;
     padding: 6px 8px 8px;
