@@ -66,6 +66,7 @@
         <script type="text/javascript" src="js/data.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
         <script type="text/javascript" src="js/node.js"></script>
+        <script type="text/javascript" src="js/ko.modal.js"></script>
     </head>
     <body>
 
@@ -187,7 +188,9 @@
                             cm: app.editing,
                             cmOptions: { mode: 'vinescript', theme: 'default' }"></textarea>
                     </div>
+
                     <div class="icon close fas fa-times" data-bind="click:app.saveNode"></div>
+
                     <ul class="editor-footer">
                         <li>
                             <div class="item-info">Length: <span class="character-count">0</span></div>
@@ -202,33 +205,100 @@
                             <div class="item-info">Col: <span class="column-index">0</span></div>
                         </li>
                     </ul>
+
                 </div>
             </div>
             <!-- /ko -->
 
-            <!-- ko if:app.deleting() != null -->
-            <div class="modal-overlay node-delete" data-bind="click: function() { app.deleting(null); }">
-
-                <div class="form" data-bind="preventBubble: 'click'">
-                    <!-- ko if: (app.deleting().selected && (app.getSelectedNodes().length > 1)) -->
-                    <div>Remove all selected nodes?</div>
-                    <!-- /ko -->
-                    <!-- ko ifnot: (app.deleting().selected) -->
-                    <div>Remove "<span data-bind="text: app.deleting().title"></span>"?</div>
-                    <!-- /ko -->
-                    <!-- ko if: (app.deleting().selected && (app.getSelectedNodes().length == 1)) -->
-                    <div>Remove "<span data-bind="text: app.deleting().title"></span>"?</div>
-                    <!-- /ko -->
-                    <div class="icon confirm fas fa-check" data-bind="click:app.deleting().remove;"></div>
+            <div id="node-delete" class="modal-overlay" data-bind="modalDialog: 'node-delete'" tabindex="-1">
+                <div class="dialog" data-bind="preventBubble: 'click'">
+                    <header>
+                        <h1>Delete Node</h1>
+                        <div class="icon close fas fa-times" data-bind="click: cancelModal"></div>
+                    </header>
+                    <div class="dialog-body">
+                        <!-- ko if:app.deleting() != null -->
+                            <!-- ko if: (app.deleting().selected && (app.getSelectedNodes().length > 1)) -->
+                            <p>Remove all selected nodes?</p>
+                            <!-- /ko -->
+                            <!-- ko ifnot: (app.deleting().selected) -->
+                            <p>Remove "<span data-bind="text: app.deleting().title"></span>"?</p>
+                            <!-- /ko -->
+                            <!-- ko if: (app.deleting().selected && (app.getSelectedNodes().length == 1)) -->
+                            <p>Remove "<span data-bind="text: app.deleting().title"></span>"?</p>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    </div>
+                    <footer>
+                        <div class="icon confirm fas fa-check" data-bind="click: function(){ app.modal().submit(); }"></div>
+                    </footer>
                 </div>
-
             </div>
-            <!-- /ko -->
+
+            <div id="shortcuts-dialog" class="modal-overlay" data-bind="modalDialog: 'shortcuts'" tabindex="-1">
+                <div class="dialog">
+                    <header>
+                        <h1>Help / Shortcuts</h1>
+                        <div class="icon close fas fa-times" data-bind="click: cancelModal"></div>
+                    </header>
+                    <div class="dialog-body">
+                        <div class="grid grid-row grid-wrap grid-50">
+                            <div class="grid grid-col grid-wrap">
+                                <section class="grid-cell">
+                                    <h3 class="section-title">Section</h3>
+                                    <dl>
+                                        <dt><kbd>?</kbd></dt>
+                                        <dd>Display this help</dd>
+                                        <dt><kbd>Ctrl</kbd>+<kbd>0</kbd></dt>
+                                        <dd>Open a new file</dd>
+                                    </dl>
+                                </section>
+                                <div class="grid-cell">
+                                    <h3 class="section-title">Section</h3>
+                                    <dl>
+                                        <dt><kbd>?</kbd></dt>
+                                        <dd>Display this help</dd>
+                                        <dt><kbd>Ctrl</kbd>+<kbd>O</kbd></dt>
+                                        <dd>Open a new file</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="grid grid-col grid-wrap">
+                                <div class="grid-cell">
+                                    <h3 class="section-title">Section</h3>
+                                    <dl>
+                                        <dt><kbd>?</kbd></dt>
+                                        <dd>Display this help</dd>
+                                        <dt><kbd>⌘ Cmd</kbd>+<kbd>Tab ↹</kbd></dt>
+                                        <dd>Open a new file</dd>
+                                    </dl>
+                                </div>
+                                <div class="grid-cell">
+                                    <h3 class="section-title">Section</h3>
+                                    <dl>
+                                        <dt><kbd>⇧ Shift</kbd></dt>
+                                        <dd>Display this help</dd>
+                                        <dt><kbd>↵ Enter</kbd>+<kbd>⌥ Opt</kbd></dt>
+                                        <dd>Open a new file</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <footer>
+                        <button class="btn" data-bind="click: cancelModal">Close</button>
+                    </footer>
+                </div>
+            </div>
 
             <!-- app info -->
             <div class="app-info">
                 <span class="app-title" data-bind="text:app.name"></span>
                 <span class="app-version" data-bind="text:app.version"></span>
+            </div>
+
+            <div id="show-shortcuts-dialog-button" data-bind="click: function() { app.modal(new ModalDialog('shortcuts')); }">
+                <a href="#"><i class="fas fa-keyboard"></i></a>
             </div>
 
             <!-- marquee -->

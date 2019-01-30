@@ -36,6 +36,8 @@ var App = function(name, version)
     this.shifted = false;
     this.isElectron = false;
     this.allowSelectNextNode = true; // allows toggle nodes with spacebar
+    // this.showShortcutsDialog = ko.observable(true);
+    this.modal = ko.observable(null); // modal name {'shortcuts', 'deleteNode', 'settings'}
     
     this.UPDATE_ARROWS_THROTTLE_MS = 25;
 
@@ -101,6 +103,7 @@ var App = function(name, version)
         {
             init: function(element, valueAccessor)
             {
+                console.log(element);
                 var eventName = ko.utils.unwrapObservable(valueAccessor());
                 ko.utils.registerEventHandler(element, eventName, function(event)
                 {
@@ -124,7 +127,7 @@ var App = function(name, version)
         };
 
         // updateArrows
-        // setInterval(function() { self.updateArrows(); }, 16);
+        setInterval(function() { self.updateArrows(); }, 16);
 
         // drag node holder around
         (function()
@@ -897,6 +900,24 @@ var App = function(name, version)
                 }
             }
         });
+    }
+
+    // this.escapeModal = function(data, event) {
+    //     console.log("escape modal");
+    //     if (event && event.keyCode == 27) {
+    //         if ($(event.target).hasClass("shortcuts-dialog")) {
+    //             app.showShortcutsDialog(false);
+    //         }
+    //         else {
+    //             // TODO apply to settings window and delete
+    //         }
+    //     }
+    // }
+
+    this.cancelModal = function() {
+        if (self.modal()) {
+            self.modal().cancel();
+        }
     }
 
     this.saveNode = function()

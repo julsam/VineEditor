@@ -163,6 +163,15 @@ var Node = function()
     this.tryRemove = function()
     {
         if (self.active()) {
+            app.modal(new ModalDialog("node-delete", function(){
+                console.log("node.cancel");
+                app.deleting(null);
+                app.modal(null);
+            }, function() {
+                console.log("node.delete");
+                self.remove();
+            }));
+            
             app.deleting(this);
         }
 
