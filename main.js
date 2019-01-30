@@ -112,6 +112,29 @@ function createWindow() {
     mainWindow.webContents.on("dom-ready", () => {
         // launch the app with the current version number
         mainWindow.webContents.send("launchApp", app.getVersion());
+        
+        // const { spawn } = require('child_process');
+        // const vinepath = "C:\\VineFolder\\";
+        // console.log(vinepath);
+
+        // const ls = spawn(
+        //      "VineScriptConsole.exe", 
+        //     ["scripts/Example.vine"],
+        //     {cwd: vinepath}
+        // );
+
+        // ls.stdout.on('data', (data) => {
+        //     console.log(`stdout: ${data}`);
+        // });
+
+        // ls.stderr.on('data', (data) => {
+        //     console.log(`stderr: ${data}`);
+        // });
+
+        // ls.on('close', (code) => {
+        //     console.log(`child process exited with code ${code}`);
+        // });
+
     });
 
     if (isDev) {
